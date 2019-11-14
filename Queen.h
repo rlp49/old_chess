@@ -7,10 +7,11 @@ class Queen : public Piece {
 
 public:
 	bool legal_move_shape(std::pair<char, char> start, std::pair<char, char> end) const {
-		/////////////////////////
-		// [REPLACE THIS STUB] //
-		/////////////////////////
-		return false;
+        // combination of rook and bishop
+        if (start->first == end->first || start->second == end->second)
+            return true;
+        else
+		    return false;
 	}
 
 	/////////////////////////////////////

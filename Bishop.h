@@ -2,16 +2,18 @@
 #define BISHOP_H
 
 #include "Piece.h"
+#include <cmath.h>
 
 class Bishop : public Piece {
 
 public:
 	bool legal_move_shape(std::pair<char, char> start, std::pair<char, char> end) const {
-
-		/////////////////////////
-		// [REPLACE THIS STUB] //
-		/////////////////////////
-		return false;
+        
+        // Bishop can only move diaganolly, so check if slope is 1
+        if (abs(start->first - end->fist) == abs(start->second - end->second))
+            return true;
+        else
+		    return false;
 	}
 
 	/////////////////////////////////////

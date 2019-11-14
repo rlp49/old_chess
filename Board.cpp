@@ -34,9 +34,7 @@ bool Board::has_valid_kings() const {
 }
 
 void Board::display() const {
-	/////////////////////////
-	// [REPLACE THIS STUB] //
-	/////////////////////////
+	cout << board;
 }
 
 /////////////////////////////////////

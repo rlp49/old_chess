@@ -7,9 +7,10 @@ class Rook : public Piece {
 
 public:
 	bool legal_move_shape(std::pair<char, char> start, std::pair<char, char> end) const {
-		/////////////////////////
-		// [REPLACE THIS STUB] //
-		/////////////////////////
+		if(start->first == end->first || start->second == end->second) {
+			//need to check if units between start and end
+			return true;
+		}
 		return false;
 	}
 

@@ -11,12 +11,18 @@ public:
 	    if(start->second == end->second - 1 && start->first == end->first){
 	      return true;
 	    }
+	    else if(start->second == '2' && end->second == '4' && start->first == end->first){
+	      return true;
+	    }
 	    else {
 	      return false;
 	    }
 	  }
 	  else {
 	    if(start->second == end->second + 1 && start->first == end->first){
+	      return true;
+	    }
+	    else if(start->second == '7' && end->second == '5' && start->first == end->first){
 	      return true;
 	    }
 	    else {

@@ -7,13 +7,22 @@ class Pawn : public Piece {
 
 public:
 	bool legal_move_shape(std::pair<char, char> start, std::pair<char, char> end) const {
-		/////////////////////////
-		// [REPLACE THIS STUB] //
-		/////////////////////////
-	  if(start->second == end->second - 1 && start->first == end->first){
-	    return true;
+	  if (white){
+	    if(start->second == end->second - 1 && start->first == end->first){
+	      return true;
+	    }
+	    else {
+	      return false;
+	    }
 	  }
-	  return false;
+	  else {
+	    if(start->second == end->second + 1 && start->first == end->first){
+	      return true;
+	    }
+	    else {
+	      return false;
+	    }
+	  }
 	}
 
 	/////////////////////////////////////

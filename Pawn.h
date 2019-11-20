@@ -10,7 +10,10 @@ public:
 		/////////////////////////
 		// [REPLACE THIS STUB] //
 		/////////////////////////
-		return false;
+	  if(start->second == end->second - 1 && start->first == end->first){
+	    return true;
+	  }
+	  return false;
 	}
 
 	/////////////////////////////////////

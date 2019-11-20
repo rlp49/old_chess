@@ -10,6 +10,11 @@ public:
 		/////////////////////////
 		// [REPLACE THIS STUB] //
 		/////////////////////////
+	  if(start->first == end->first-1 || start->first == end->first +1){
+	    if(start->second == end->second-1 || start->second == end->second +1){
+	      return true;
+	    }
+	  }
 		return false;
 	}
 

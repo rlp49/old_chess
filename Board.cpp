@@ -10,16 +10,17 @@
 /////////////////////////////////////
 Board::Board(){}
 
+//returns pointer to position if it exists on board
+//returns nullptr if nothing's at that position
 const Piece* Board::operator()(std::pair<char, char> position) const {
-	//copying from << overloader, we'll see if it works - Ray
-	const Piece* piece = board(std::pair<char, char> (position->first, position->second));
-	if(piece) 
-		return piece;
-	else
-		return nullptr;
+	if(position->first >= 'A' && position->first <= 'H' &&  //checks if on board
+		 position->second >= '1' && position->second <= '8') 
+		return occ[position];
+	else return nullptr;	
 }
 
-
+//adds piece with specified designator at the given position
+//checks if: designator is valid, position is on board, and position is unoccupied
 bool Board::add_piece(std::pair<char, char> position, char piece_designator) {
 	char ch = piece_designator;
 	if(position->first >= 'A' && position->first <= 'H' &&  //checks if on board

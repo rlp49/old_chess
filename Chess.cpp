@@ -1,4 +1,7 @@
 #include "Chess.h"
+#include <iostream>
+
+using std::cout; using std::endl;
 
 /////////////////////////////////////
 // DO NOT MODIFY THIS FUNCTION!!!! //
@@ -36,17 +39,45 @@ Chess::Chess() : is_white_turn(true) {
 }
 
 bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
-	/////////////////////////
-	// [REPLACE THIS STUB] //
-	/////////////////////////
+    // TODO check if start is a piece
+    Piece* piece = occ[start];
+    if (piece == NULL)
+    {
+        cout << "No piece at starting pos" << endl;
+        return 0;
+    }
+
+    // TODO Check if the piece is the current player's piece 
+    if (piece->white != turn_white())
+    {
+        cout << "Not your piece" << endl;
+        return 0;
+    }
+
+    // TODO check if end is in bounds of board
+    if (!(end->first >= 'A' && end->first <= 'H' && end->second >= '1' && end->second <= '8'))
+    {
+        cout << "end pos is out of bounds" << endl;
+        return 0;
+    }
+
+    // TODO call valid_move for the piece
+   
+
+    // TODO if not knight, check if there are no pieces in between
+
+    // TODO move by swapping pointer of start and end, set start to note
+
+
+
 	return false;
 }
 
 
 bool Chess::in_check(bool white) const {
-	/////////////////////////
-	// [REPLACE THIS STUB] //
-	/////////////////////////
+    // check if the king is threatened in the current board state
+
+    
 	return false;
 }
 
@@ -60,10 +91,7 @@ bool Chess::in_mate(bool white) const {
 
 
 bool Chess::in_stalemate(bool white) const {
-	/////////////////////////
-	// [REPLACE THIS STUB] //
-	/////////////////////////
-	return false;
+    return (in_mate(white) != in_check(white));
 }
 
 

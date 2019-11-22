@@ -44,33 +44,88 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
     if (piece == NULL)
     {
         cout << "No piece at starting pos" << endl;
-        return 0;
+        return false;
     }
 
     // TODO Check if the piece is the current player's piece 
     if (piece->white != turn_white())
     {
         cout << "Not your piece" << endl;
-        return 0;
+        return false;
     }
 
     // TODO check if end is in bounds of board
     if (!(end->first >= 'A' && end->first <= 'H' && end->second >= '1' && end->second <= '8'))
     {
         cout << "end pos is out of bounds" << endl;
-        return 0;
+        return false;
     }
 
-    // TODO call valid_move for the piece
-   
+    //Check if Piece at end is of the same color
+    if (occ[end]){
+      if (ooc[start]->is_white() == ooc[end]->is_white()){
+	cout << "Your piece occupies that square" << endl;
+	return false;
+      }
+    }
 
-    // TODO if not knight, check if there are no pieces in between
+    
+
+    // TODO call valid_move for the piece
+    if(ooc[start].legal_move_shape(start, end)){
+      // TODO if not knight, check if there are no pieces in between
+      if(ooc[start].to_ascii != 'N' && ooc[start].to_ascii != 'n'){
+        int cFile = end->first - start->first;
+	int cRank = end->second - start->second;
+	int addF;
+	int addR;
+	if (cFile < 0){
+	  addF = -1;
+	}else if(cFile ==0){
+	  addF = 0;
+	}else{
+	  addF = 1;
+	}
+	if (cRank < 0){
+          addR = -1;
+        }else if(cRank ==0){
+          addR = 0;
+        }else{
+          addR = 1;
+        }
+	int step = 1;
+	while((step*addR != cRank) || (step*addF != cFile)){
+	  pair<char, char> steps = (start->first + step*addF, start->second + step*addR);
+	  if(ooc[steps)){
+	    cout << "piece is in the way" << endl;
+	    return false;
+	  }
+	}
+       	
+      }
+    }
+    else if(ooc[start].to_ascii() == 'P' ||ooc.to_ascii() == 'p'){
+      if (!ooc[start].legal_capture_shape(start,end)){
+	cout << "Invalid Move" << endl;
+	return false;
+      }
+    }
+
+    
 
     // TODO move by swapping pointer of start and end, set start to note
 
-
-
-	return false;
+    Piece* temp = ooc[end];
+    ooc[end] = ooc[start];
+    ooc[start] = NULL;
+    // Check for if this move puts the player in check
+    if(in_check(turn_white)){
+      ooc[start] = ooc[end];
+      ooc[end] = temp;
+      cout<< "That puts you in check"<<endl;
+      return false;
+    }
+    return true;
 }
 
 

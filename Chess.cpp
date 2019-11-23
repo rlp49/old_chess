@@ -1,12 +1,14 @@
 #include "Chess.h"
 #include <iostream>
+#include <utility>
 
 using std::cout; using std::endl;
+using std::pair; using std::make_pair;
 
 // added function itw() to check for in the way pieces
 static bool itw(pair<char, char> start, pair<char, char> end) {
-    int cFile = end->first - start->first;
-    int cRank = end->second - start->second;
+    int cFile = end.first - start.first;
+    int cRank = end.second - start.second;
     int addF;
     int addR;
     
@@ -26,8 +28,8 @@ static bool itw(pair<char, char> start, pair<char, char> end) {
     
     int step = 1;
     while((step*addR != cRank) || (step*addF != cFile)){
-        pair<char, char> steps = (start->first + step*addF, start->second + step*addR);
-        if(ooc[steps])
+        pair<char, char> steps = make_pair(start.first + step*addF, start.second + step*addR);
+        if(occ[steps])
             return false;
     }
 }
@@ -77,14 +79,14 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
     }
 
     // Check if the piece is the current player's piece 
-    if (piece->white != turn_white())
+    if (piece->is_white() != turn_white())
     {
         cout << "Not your piece" << endl;
         return false;
     }
 
     // check if end is in bounds of board
-    if (!(end->first >= 'A' && end->first <= 'H' && end->second >= '1' && end->second <= '8'))
+    if (!(end.first >= 'A' && end.first <= 'H' && end.second >= '1' && end.second <= '8'))
     {
         cout << "end pos is out of bounds" << endl;
         return false;
@@ -92,7 +94,7 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
 
     //Check if Piece at end is of the same color
     if (occ[end]){
-        if (ooc[start]->is_white() == ooc[end]->is_white()){
+        if (occ[start].is_white() == occ[end].is_white()){
 	        cout << "Your piece occupies that square" << endl;
 	        return false;
         }
@@ -101,11 +103,11 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
     
 
     // call valid_move for the piece
-    if(ooc[start].legal_move_shape(start, end)){
+    if(occ[start].legal_move_shape(start, end)){
         // if not knight, check if there are no pieces in between
-        if(ooc[start].to_ascii != 'N' && ooc[start].to_ascii != 'n'){
-            int cFile = end->first - start->first;
-	        int cRank = end->second - start->second;
+        if(occ[start].to_ascii != 'N' && occ[start].to_ascii != 'n'){
+            int cFile = end.first - start.first;
+	        int cRank = end.second - start.second;
 	        int addF;
 	        int addR;
 	        
@@ -131,30 +133,30 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
 	        
             int step = 1;
 	        while((step*addR != cRank) || (step*addF != cFile)){
-	            pair<char, char> steps = (start->first + step*addF, start->second + step*addR);
-	            if(ooc[steps]){
+	            pair<char, char> steps = make_pair(start.first + step*addF, start.second + step*addR);
+	            if(occ[steps]){
 	                cout << "piece is in the way" << endl;
 	                return false;
 	            }
 	        }
         }
     }
-    else if(ooc[start].to_ascii() == 'P' || ooc.to_ascii() == 'p'){
-        if (!ooc[start].legal_capture_shape(start,end)){
+    else if(occ[start].to_ascii() == 'P' || occ.to_ascii() == 'p'){
+        if (!occ[start].legal_capture_shape(start,end)){
 	        cout << "Invalid Move" << endl;
 	        return false;
         }
     }
 
     // move by swapping pointer of start and end, set start to note
-    Piece* temp = ooc[end];
-    ooc[end] = ooc[start];
-    ooc[start] = NULL;
+    Piece* temp = occ[end];
+    occ[end] = occ[start];
+    occ[start] = NULL;
 
     // Check for if this move puts the player in check
-    if(in_check(turn_white)){
-      ooc[start] = ooc[end];
-      ooc[end] = temp;
+    if(in_check(turn_white())){
+      occ[start] = occ[end];
+      occ[end] = temp;
       cout<< "That puts you in check"<<endl;
       return false;
     }
@@ -170,12 +172,12 @@ bool Chess::in_check(bool white) const {
     pair<char, char> king;  // also should keep track of king as a field or loop through board to find manually
     
     // returns true if prev has a legal move to capture and no peice in the way (if not rook)
-    if (tolower(ooc[prev].to_ascii() == 'p'))
-        return ooc[prev].legal_capture_shape(prev, king) && !itw(prev, king); // if prev is a pawn
-    else if (tolower(ooc[prev].to_ascii() == 'r'))
-        return ooc[prev].legal_capture_shape(prev, king); // if prev is a rook
+    if (tolower(occ[prev].to_ascii() == 'p'))
+        return occ[prev].legal_capture_shape(prev, king) && !itw(prev, king); // if prev is a pawn
+    else if (tolower(occ[prev].to_ascii() == 'r'))
+        return occ[prev].legal_capture_shape(prev, king); // if prev is a rook
     else
-        return ooc[prev].legal_capture_shape(prev, king) && !itw(prev, king); // if prev is anything else
+        return occ[prev].legal_capture_shape(prev, king) && !itw(prev, king); // if prev is anything else
 
     // TODO Discovered check. Test if the king is put into check by your own move.
     bool in_check = false;
@@ -187,13 +189,13 @@ bool Chess::in_check(bool white) const {
                 return true;
 
             pair<char, char> piece = make_pair(i+'A', j+'0');
-            if (ooc[piece].is_white() != white) { // check if piece in board tho opposite player's 
-                if (tolower(ooc[piece].to_ascii() == 'p'))
-                    in_check = ooc[piece].legal_capture_shape(piece, king) && !itw(piece, king);
-                else if (tolower(ooc[piece].to_ascii() == 'r'))
-                    in_check = ooc[piece].legal_capture_shape(piece, king);
+            if (occ[piece].is_white() != white) { // check if piece in board tho opposite player's 
+                if (tolower(occ[piece].to_ascii() == 'p'))
+                    in_check = occ[piece].legal_capture_shape(piece, king) && !itw(piece, king);
+                else if (tolower(occ[piece].to_ascii() == 'r'))
+                    in_check = occ[piece].legal_capture_shape(piece, king);
                 else
-                    in_check = ooc[piece].legal_capture_shape(piece, king) && !itw(piece, king); 
+                    in_check = occ[piece].legal_capture_shape(piece, king) && !itw(piece, king); 
             }
         }
     }

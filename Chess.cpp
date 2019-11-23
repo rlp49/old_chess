@@ -63,10 +63,10 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
 
     //Check if Piece at end is of the same color
     if (occ[end]){
-      if (ooc[start]->is_white() == ooc[end]->is_white()){
-	cout << "Your piece occupies that square" << endl;
-	return false;
-      }
+        if (ooc[start]->is_white() == ooc[end]->is_white()){
+	        cout << "Your piece occupies that square" << endl;
+	        return false;
+        }
     }
 
     
@@ -74,44 +74,49 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
     // TODO call valid_move for the piece
     if(ooc[start].legal_move_shape(start, end)){
       // TODO if not knight, check if there are no pieces in between
-      if(ooc[start].to_ascii != 'N' && ooc[start].to_ascii != 'n'){
-        int cFile = end->first - start->first;
-	int cRank = end->second - start->second;
-	int addF;
-	int addR;
-	if (cFile < 0){
-	  addF = -1;
-	}else if(cFile ==0){
-	  addF = 0;
-	}else{
-	  addF = 1;
-	}
-	if (cRank < 0){
-          addR = -1;
-        }else if(cRank ==0){
-          addR = 0;
-        }else{
-          addR = 1;
+        if(ooc[start].to_ascii != 'N' && ooc[start].to_ascii != 'n'){
+            int cFile = end->first - start->first;
+	        int cRank = end->second - start->second;
+	        int addF;
+	        int addR;
+	        
+            if (cFile < 0){
+	            addF = -1;
+	        }
+            else if(cFile ==0){
+	            addF = 0;
+	        }
+            else{
+	            addF = 1;
+	        }
+	        
+            if (cRank < 0){
+                addR = -1;
+            }
+            else if(cRank ==0){
+                addR = 0;
+            }
+            else{
+                addR = 1;
+            }
+	        
+            int step = 1;
+	        while((step*addR != cRank) || (step*addF != cFile)){
+	            pair<char, char> steps = (start->first + step*addF, start->second + step*addR);
+	            if(ooc[steps]){
+	                cout << "piece is in the way" << endl;
+	                return false;
+	            }
+	        }
         }
-	int step = 1;
-	while((step*addR != cRank) || (step*addF != cFile)){
-	  pair<char, char> steps = (start->first + step*addF, start->second + step*addR);
-	  if(ooc[steps)){
-	    cout << "piece is in the way" << endl;
-	    return false;
-	  }
-	}
-       	
-      }
     }
     else if(ooc[start].to_ascii() == 'P' ||ooc.to_ascii() == 'p'){
-      if (!ooc[start].legal_capture_shape(start,end)){
-	cout << "Invalid Move" << endl;
-	return false;
-      }
+        if (!ooc[start].legal_capture_shape(start,end)){
+	        cout << "Invalid Move" << endl;
+	        return false;
+        }
     }
 
-    
 
     // TODO move by swapping pointer of start and end, set start to note
 

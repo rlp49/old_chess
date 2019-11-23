@@ -2,7 +2,7 @@
 #define BISHOP_H
 
 #include "Piece.h"
-#include <cmath.h>
+#include <cmath>
 
 class Bishop : public Piece {
 

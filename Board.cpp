@@ -13,8 +13,8 @@ Board::Board(){}
 //returns pointer to position if it exists on board
 //returns nullptr if nothing's at that position
 const Piece* Board::operator()(std::pair<char, char> position) const {
-	if(position->first >= 'A' && position->first <= 'H' &&  //checks if on board
-		 position->second >= '1' && position->second <= '8') 
+	if(position.first >= 'A' && position.first <= 'H' &&  //checks if on board
+		 position.second >= '1' && position.second <= '8') 
 		return occ[position];
 	else return nullptr;	
 }
@@ -23,14 +23,16 @@ const Piece* Board::operator()(std::pair<char, char> position) const {
 //checks if: designator is valid, position is on board, and position is unoccupied
 bool Board::add_piece(std::pair<char, char> position, char piece_designator) {
 	char ch = piece_designator;
-	if(position->first >= 'A' && position->first <= 'H' &&  //checks if on board
-		 position->second >= '1' && position->second <= '8') {
+	if(position.first >= 'A' && position.first <= 'H' &&  //checks if on board
+		 position.second >= '1' && position.second <= '8') {
 
-		if(occ[position] != NULL) //checks if pos already occupied
+		if(occ[position] != nullptr) //checks if pos already occupied
 			return false;
 
-		occ[position] = create_piece(piece_designator);
-		if(occ[position] = NULL) //checks if designator is valid
+        Piece piece = create_piece(piece_designator);
+
+		occ[position] = &piece; // fixed this, occ[pos] should be a pointer
+		if(occ[position] = nullptr) //checks if designator is valid
 			return false;
 
 		return true; //returns true if it passes all checks

@@ -36,6 +36,12 @@ public:
 	// -- if the specified location is occupied
 	bool add_piece(std::pair<char, char> position, char piece_designator);
 
+    // Returns true on successful removal of piece
+    // Deletes the entry from the map
+    bool remove_piece(std::pair<char,char> pos);
+
+    // Sets the position of a piece to another
+    bool move_piece(std::pair<char,char> start, std::pair<char,char> end);
 	// Displays the board by printing it to stdout
 	void display() const;
 

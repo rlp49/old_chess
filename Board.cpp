@@ -10,6 +10,22 @@
 /////////////////////////////////////
 Board::Board(){}
 
+bool remove_piece(std::pair<char,char> pos) {
+    if (occ[pos] != nullptr) { // check if there actually is a piece there before deleting it
+        occ.erase(pos);
+        return true;
+    }
+    return false;
+}
+
+bool move_piece(std::pair<char,char> start, std::pair<char,char> end) {
+    if (occ[end] != nullptr) // if end pos has a piece, need to delete it first
+        delete occ[end];
+
+    // move piece and delete start
+    occ[end] = occ[start];
+    remove_piece(start);
+}
 //returns pointer to position if it exists on board
 //returns nullptr if nothing's at that position
 const Piece* Board::operator()(std::pair<char, char> position) const {

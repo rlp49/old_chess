@@ -13,10 +13,10 @@ Board::Board(){}
 //returns pointer to position if it exists on board
 //returns nullptr if nothing's at that position
 const Piece* Board::operator()(std::pair<char, char> position) const {
-	if(position.first >= 'A' && position.first <= 'H' &&  //checks if on board
-		 position.second >= '1' && position.second <= '8') 
-		return occ[position];
-	else return nullptr;	
+	if (occ.find(position) != occ.end())
+        return occ[position];
+    else
+        return nullptr;
 }
 
 //adds piece with specified designator at the given position

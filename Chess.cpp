@@ -6,7 +6,7 @@ using std::cout; using std::endl;
 using std::pair; using std::make_pair;
 
 // added function itw() to check for in the way pieces
-static bool itw(pair<char, char> start, pair<char, char> end) {
+bool Chess::itw(pair<char, char> start, pair<char, char> end) {
     int cFile = end.first - start.first;
     int cRank = end.second - start.second;
     int addF;
@@ -29,15 +29,17 @@ static bool itw(pair<char, char> start, pair<char, char> end) {
     int step = 1;
     while((step*addR != cRank) || (step*addF != cFile)){
         pair<char, char> steps = make_pair(start.first + step*addF, start.second + step*addR);
-        if(occ[steps])
-            return false;
+        if (board(steps) != nullptr) // board(position) returns nullptr if piece doesn't exist
+            return true;
     }
+
+    return false; // return false if no pieces in the way
 }
 
 /////////////////////////////////////
 // DO NOT MODIFY THIS FUNCTION!!!! //
 /////////////////////////////////////
-Chess::Chess() : is_white_turn(true) {
+Chess::Chess() : is_white_turn(true) { // constructor for Chess
 	// Add the pawns
 	for (int i = 0; i < 8; i++) {
 		board.add_piece(std::pair<char, char>('A' + i, '1' + 1), 'P');
@@ -71,8 +73,8 @@ Chess::Chess() : is_white_turn(true) {
 
 bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
     // check if start is a piece
-    Piece* piece = occ[start];
-    if (piece == NULL)
+    const Piece* piece = board(start);
+    if (piece == nullptr)
     {
         cout << "No piece at starting pos" << endl;
         return false;
@@ -93,8 +95,8 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
     }
 
     //Check if Piece at end is of the same color
-    if (occ[end]){
-        if (occ[start].is_white() == occ[end].is_white()){
+    if (board(end) != nullptr){
+        if (piece->is_white() == board(end)->is_white()){
 	        cout << "Your piece occupies that square" << endl;
 	        return false;
         }
@@ -103,62 +105,30 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
     
 
     // call valid_move for the piece
-    if(occ[start].legal_move_shape(start, end)){
+    if(piece->legal_move_shape(start, end)){
         // if not knight, check if there are no pieces in between
-        if(occ[start].to_ascii != 'N' && occ[start].to_ascii != 'n'){
-            int cFile = end.first - start.first;
-	        int cRank = end.second - start.second;
-	        int addF;
-	        int addR;
-	        
-            if (cFile < 0){
-	            addF = -1;
-	        }
-            else if(cFile ==0){
-	            addF = 0;
-	        }
-            else{
-	            addF = 1;
-	        }
-	        
-            if (cRank < 0){
-                addR = -1;
+        if(tolower(piece->to_ascii()) != 'n'){
+            if (itw(start, end)) {
+                cout << "Piece in the way" << endl;
+                return false; // if piece is in the way, return false
             }
-            else if(cRank ==0){
-                addR = 0;
-            }
-            else{
-                addR = 1;
-            }
-	        
-            int step = 1;
-	        while((step*addR != cRank) || (step*addF != cFile)){
-	            pair<char, char> steps = make_pair(start.first + step*addF, start.second + step*addR);
-	            if(occ[steps]){
-	                cout << "piece is in the way" << endl;
-	                return false;
-	            }
-	        }
         }
     }
-    else if(occ[start].to_ascii() == 'P' || occ.to_ascii() == 'p'){
-        if (!occ[start].legal_capture_shape(start,end)){
+    else if(tolower(piece->to_ascii()) == 'p'){
+        if (!piece->legal_capture_shape(start,end)){
 	        cout << "Invalid Move" << endl;
 	        return false;
         }
     }
-
-    // move by swapping pointer of start and end, set start to note
-    Piece* temp = occ[end];
-    occ[end] = occ[start];
-    occ[start] = NULL;
+    // make the move
+    Board board_old = board; // make a copy of old board in case we need to undo the move, make sure it has a copy constructor
+    board.move_piece(start, end);
 
     // Check for if this move puts the player in check
     if(in_check(turn_white())){
-      occ[start] = occ[end];
-      occ[end] = temp;
-      cout<< "That puts you in check"<<endl;
-      return false;
+        board = board_old; // revert to old board
+        cout<< "That puts you in check"<<endl;
+        return false;
     }
     return true;
 }

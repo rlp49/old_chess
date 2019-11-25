@@ -2,6 +2,7 @@
 #define CHESS_H
 
 #include <iostream>
+#include <utility>
 #include "Piece.h"
 #include "Board.h"
 
@@ -36,6 +37,12 @@ public:
 
 	// Returns true if the designated player is in mate
 	bool in_stalemate(bool white) const;
+
+    // helper function to check if piece is in the way
+    bool itw(std::pair<char, char> start, std::pair<char, char> end);
+
+    // helper function to check if piece exists in the board
+    bool piece_exists(std::pair<char,char> pos);
 
 private:
 	// The board

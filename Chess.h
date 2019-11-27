@@ -39,10 +39,7 @@ public:
 	bool in_stalemate(bool white) const;
 
     // helper function to check if piece is in the way
-    bool itw(std::pair<char, char> start, std::pair<char, char> end);
-
-    // helper function to check if piece exists in the board
-    bool piece_exists(std::pair<char,char> pos);
+    bool itw(std::pair<char, char> start, std::pair<char, char> end) const;
 
 private:
 	// The board

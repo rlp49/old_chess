@@ -6,7 +6,7 @@ using std::cout; using std::endl;
 using std::pair; using std::make_pair;
 
 // added function itw() to check for in the way pieces
-bool Chess::itw(pair<char, char> start, pair<char, char> end) {
+bool Chess::itw(pair<char, char> start, pair<char, char> end) const {
     int cFile = end.first - start.first;
     int cRank = end.second - start.second;
     int addF;
@@ -142,12 +142,12 @@ bool Chess::in_check(bool white) const {
     pair<char, char> king;  // also should keep track of king as a field or loop through board to find manually
     
     // returns true if prev has a legal move to capture and no peice in the way (if not rook)
-    if (tolower(occ[prev].to_ascii() == 'p'))
-        return occ[prev].legal_capture_shape(prev, king) && !itw(prev, king); // if prev is a pawn
-    else if (tolower(occ[prev].to_ascii() == 'r'))
-        return occ[prev].legal_capture_shape(prev, king); // if prev is a rook
+    if (tolower(board(prev)->to_ascii() == 'p'))
+        return board(prev)->legal_capture_shape(prev, king) && !itw(prev, king); // if prev is a pawn
+    else if (tolower(board(prev)->to_ascii() == 'r'))
+        return board(prev)->legal_capture_shape(prev, king); // if prev is a rook
     else
-        return occ[prev].legal_capture_shape(prev, king) && !itw(prev, king); // if prev is anything else
+        return board(prev)->legal_capture_shape(prev, king) && !itw(prev, king); // if prev is anything else
 
     // TODO Discovered check. Test if the king is put into check by your own move.
     bool in_check = false;
@@ -159,13 +159,13 @@ bool Chess::in_check(bool white) const {
                 return true;
 
             pair<char, char> piece = make_pair(i+'A', j+'0');
-            if (occ[piece].is_white() != white) { // check if piece in board tho opposite player's 
-                if (tolower(occ[piece].to_ascii() == 'p'))
-                    in_check = occ[piece].legal_capture_shape(piece, king) && !itw(piece, king);
-                else if (tolower(occ[piece].to_ascii() == 'r'))
-                    in_check = occ[piece].legal_capture_shape(piece, king);
+            if (board(piece)->is_white() != white) { // check if piece in board tho opposite player's 
+                if (tolower(board(piece)->to_ascii() == 'p'))
+                    in_check = board(piece)->legal_capture_shape(piece, king) && !itw(piece, king);
+                else if (tolower(board(piece)->to_ascii() == 'r'))
+                    in_check = board(piece)->legal_capture_shape(piece, king);
                 else
-                    in_check = occ[piece].legal_capture_shape(piece, king) && !itw(piece, king); 
+                    in_check = board(piece)->legal_capture_shape(piece, king) && !itw(piece, king); 
             }
         }
     }

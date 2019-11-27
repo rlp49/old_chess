@@ -4,13 +4,15 @@
 #include "Board.h"
 #include "CreatePiece.h"
 
+using std::make_pair;
+using std::cout;
 
 /////////////////////////////////////
 // DO NOT MODIFY THIS FUNCTION!!!! //
 /////////////////////////////////////
 Board::Board(){}
 
-bool remove_piece(std::pair<char,char> pos) {
+bool Board::remove_piece(std::pair<char,char> pos) {
     if (occ[pos] != nullptr) { // check if there actually is a piece there before deleting it
         occ.erase(pos);
         return true;
@@ -18,19 +20,21 @@ bool remove_piece(std::pair<char,char> pos) {
     return false;
 }
 
-bool move_piece(std::pair<char,char> start, std::pair<char,char> end) {
+bool Board::move_piece(std::pair<char,char> start, std::pair<char,char> end) {
     if (occ[end] != nullptr) // if end pos has a piece, need to delete it first
         delete occ[end];
 
     // move piece and delete start
     occ[end] = occ[start];
     remove_piece(start);
+
+    return true;
 }
 //returns pointer to position if it exists on board
 //returns nullptr if nothing's at that position
 const Piece* Board::operator()(std::pair<char, char> position) const {
 	if (occ.find(position) != occ.end())
-        return occ[position];
+        return occ.at(position);
     else
         return nullptr;
 }
@@ -38,17 +42,15 @@ const Piece* Board::operator()(std::pair<char, char> position) const {
 //adds piece with specified designator at the given position
 //checks if: designator is valid, position is on board, and position is unoccupied
 bool Board::add_piece(std::pair<char, char> position, char piece_designator) {
-	char ch = piece_designator;
 	if(position.first >= 'A' && position.first <= 'H' &&  //checks if on board
 		 position.second >= '1' && position.second <= '8') {
 
 		if(occ[position] != nullptr) //checks if pos already occupied
 			return false;
 
-        Piece piece = create_piece(piece_designator);
+        occ[position] = create_piece(piece_designator);
 
-		occ[position] = &piece; // fixed this, occ[pos] should be a pointer
-		if(occ[position] = nullptr) //checks if designator is valid
+		if(occ[position] == nullptr) //checks if designator is valid
 			return false;
 
 		return true; //returns true if it passes all checks
@@ -59,10 +61,10 @@ bool Board::add_piece(std::pair<char, char> position, char piece_designator) {
 //instructions only say to check if there are two kings,
 //not necessarily of different colors, so...
 bool Board::has_valid_kings() const {
-	int count = 0
+	int count = 0;
 	for(char r = '8'; r >= '1'; r--) {
 		for(char c = 'A'; c <= 'H'; c++) {
-			if(occ[(c, r)] == 'K' || occ[(c, r)] == 'k') 
+			if(occ.at(make_pair(c,r))->to_ascii() == 'K' || occ.at(make_pair(c,r))->to_ascii() == 'k') 
 				count += 1;
 		}
 	}	
@@ -71,7 +73,7 @@ bool Board::has_valid_kings() const {
 }
 
 void Board::display() const {
-	cout << board;
+	cout << this;
 }
 
 /////////////////////////////////////

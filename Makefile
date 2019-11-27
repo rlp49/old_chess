@@ -1,6 +1,8 @@
 CC=g++
 CFLAGS=-std=c++11 -pedantic -Wall -Wextra
 
+# Still incorrect. Someone fix the makefile!
+
 # target executable
 main: main.o Chess.o Board.o
 	$(CC) -o main main.o Chess.o Board.o

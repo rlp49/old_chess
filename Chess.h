@@ -39,7 +39,7 @@ public:
 	bool in_stalemate(bool white) const;
 
   //helper function to check if a legal move exists
-  bool check_move(std::pair<char, char> start, std::pair<char, char> end) const;
+  bool check_move(std::pair<char, char> start, std::pair<char, char> end);
     // helper function to check if piece is in the way
     bool itw(std::pair<char, char> start, std::pair<char, char> end) const;
   

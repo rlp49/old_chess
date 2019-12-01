@@ -36,7 +36,8 @@ bool Chess::itw(pair<char, char> start, pair<char, char> end) const {
     return false; // return false if no pieces in the way
 }
 
-bool check_move(std::pair<char, char> start, std::pair<char, char> end) const{
+// NOTE: I deleted the const keyword because function modifies the class i.e. the board
+bool Chess::check_move(std::pair<char, char> start, std::pair<char, char> end) {
   Board board_old = board;//makes the board revert back to orginal
   if(make_move(start, end)){
     board = board_old;
@@ -185,8 +186,9 @@ bool Chess::in_check(bool white) const {
 	return false;
 }
 
-
-bool Chess::in_mate(bool white) const {
+// NOTE: if we want in_mate to be a const function we can't call check_move() inside it.
+// Need to fix implementation. 
+bool Chess::in_mate(bool white) const { 
   //Iterate through all peieces with every possible move
   pair<char,char> startm;
   pair<char,char> endm;
@@ -195,10 +197,11 @@ bool Chess::in_mate(bool white) const {
     for (char j = '1'; j <='8'; j++) {
       startm =  make_pair(i,j);
       if(board(startm)){//Finds is a piece exists
-	if((white && board(startm).is_white()) || !(white || board(startm).is_white())){ // Check if it a piece that is the turns color
+	if((white && board(startm)->is_white()) || !(white || board(startm)->is_white())){ // Check if it a piece that is the turns color
 	  for (char a = 'A'; i <='H'; i++){
 	    for (char b = '1'; j <='8'; j++) {
 	      endm = make_pair(a,b);
+          // TODO compiler error here: check_move() is not const
 	      if (check_move(startm , endm)){//checks every possible move for a legal move
 		return false;// if a legal move is found the player is NOT in mate
 	      }
@@ -207,13 +210,8 @@ bool Chess::in_mate(bool white) const {
 	}
       }
     }
-  }
+  
   return true;// if not legal moves are found they are in a mate
-		
-	  
-	
-
-;
 }
 
 

@@ -12,6 +12,9 @@ bool Chess::itw(pair<char, char> start, pair<char, char> end) const {
     int addF;
     int addR;
     
+		//if knight, just return false
+		if(tolower(board(start)->to_ascii()) == 'n') return false; 
+		//maybe add other checks, if mystery piece is also a jumper? if time permits
     if (cFile < 0)
         addF = -1;
     else if(cFile ==0)
@@ -26,12 +29,21 @@ bool Chess::itw(pair<char, char> start, pair<char, char> end) const {
     else
         addR = 1;
     
+		//added
+		pair<char, char> steps = make_pair(start.first + addF, start.second + addR);
+		while(!(steps.first == end.first && steps.second == end.second)) {
+			steps = make_pair(steps.first + addF, steps.second + addR);
+			if(board(steps) != nullptr) return true;
+		}
+
+		/* removed
     int step = 1;
     while((step*addR != cRank) || (step*addF != cFile)){
         pair<char, char> steps = make_pair(start.first + step*addF, start.second + step*addR);
         if (board(steps) != nullptr) // board(position) returns nullptr if piece doesn't exist
             return true;
     }
+		*/
 
     return false; // return false if no pieces in the way
 }
@@ -154,31 +166,27 @@ bool Chess::in_check(bool white) const {
     pair<char, char> prev;  // game needs to somehow keep track on the previous move as a field
     pair<char, char> king;  // also should keep track of king as a field or loop through board to find manually
     
-    // returns true if prev has a legal move to capture and no peice in the way (if not rook)
-    if (tolower(board(prev)->to_ascii() == 'p'))
-        return board(prev)->legal_capture_shape(prev, king) && !itw(prev, king); // if prev is a pawn
-    else if (tolower(board(prev)->to_ascii() == 'r'))
+    // returns true if prev has a legal move to capture and no piece in the way (if not rook)
+    if (tolower(board(prev)->to_ascii()) == 'p')
+        return board(prev)->legal_capture_shape(prev, king); // if prev is a pawn
+		/* removed
+    else if (tolower(board(prev)->to_ascii()) == 'r')
         return board(prev)->legal_capture_shape(prev, king); // if prev is a rook
+		*/
     else
         return board(prev)->legal_capture_shape(prev, king) && !itw(prev, king); // if prev is anything else
 
     // TODO Discovered check. Test if the king is put into check by your own move.
-    bool in_check = false;
     
     // looping through the entire board to chech each piece
     for (int i = 0; i < 8; i++) {
         for (int j = 0; i < 8; j++) {
-            if (in_check) // return if we already found piece that puts king in check
-                return true;
-
             pair<char, char> piece = make_pair(i+'A', j+'0');
-            if (board(piece)->is_white() != white) { // check if piece in board tho opposite player's 
-                if (tolower(board(piece)->to_ascii() == 'p'))
-                    in_check = board(piece)->legal_capture_shape(piece, king) && !itw(piece, king);
-                else if (tolower(board(piece)->to_ascii() == 'r'))
-                    in_check = board(piece)->legal_capture_shape(piece, king);
+            if (board(piece)->is_white() != white) { // check if piece on board is opposite player's 
+                if (tolower(board(piece)->to_ascii()) == 'p')
+                    if(board(piece)->legal_capture_shape(piece, king)) return true;
                 else
-                    in_check = board(piece)->legal_capture_shape(piece, king) && !itw(piece, king); 
+                    if(board(piece)->legal_capture_shape(piece, king) && !itw(piece, king)) return true; 
             }
         }
     }

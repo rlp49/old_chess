@@ -42,6 +42,9 @@ public:
   bool check_move(std::pair<char, char> start, std::pair<char, char> end);
     // helper function to check if piece is in the way
     bool itw(std::pair<char, char> start, std::pair<char, char> end) const;
+  //helper to check if legal moves exist
+  bool no_legal_moves(bool color);
+
   
 private:
 	// The board

@@ -73,7 +73,7 @@ bool Board::has_valid_kings() const {
 }
 
 void Board::display() const {
-	cout << this;
+	cout << *this;
 }
 
 /////////////////////////////////////

@@ -29,26 +29,15 @@ bool Chess::itw(pair<char, char> start, pair<char, char> end) const {
     else
         addR = 1;
     
-		//added
 		pair<char, char> steps = make_pair(start.first + addF, start.second + addR);
 		while(!(steps.first == end.first && steps.second == end.second)) {
 			steps = make_pair(steps.first + addF, steps.second + addR);
 			if(board(steps) != nullptr) return true;
 		}
 
-		/* removed
-    int step = 1;
-    while((step*addR != cRank) || (step*addF != cFile)){
-        pair<char, char> steps = make_pair(start.first + step*addF, start.second + step*addR);
-        if (board(steps) != nullptr) // board(position) returns nullptr if piece doesn't exist
-            return true;
-    }
-		*/
-
     return false; // return false if no pieces in the way
 }
 
-// NOTE: I deleted the const keyword because function modifies the class i.e. the board
 bool Chess::check_move(std::pair<char, char> start, std::pair<char, char> end) {
   Board board_old = board;//makes the board revert back to orginal
   if(make_move(start, end)){

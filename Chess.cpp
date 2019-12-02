@@ -144,6 +144,10 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
         cout<< "That puts you in check"<<endl;
         return false;
     }
+
+    // update the last moved piece
+    //prev = end;
+
     return true;
 }
 
@@ -154,14 +158,17 @@ bool Chess::in_check(bool white) const {
     // TODO Direct check. Test if the king is currently in check from the opponents move.
     pair<char, char> prev;  // game needs to somehow keep track on the previous move as a field
     pair<char, char> king;  // also should keep track of king as a field or loop through board to find manually
+
+   
+    // for debug, remove later
+    if (board(prev) == nullptr)
+        return false;
+    if (board(king) == nullptr)
+        return false;
     
     // returns true if prev has a legal move to capture and no piece in the way (if not rook)
     if (tolower(board(prev)->to_ascii()) == 'p')
         return board(prev)->legal_capture_shape(prev, king); // if prev is a pawn
-		/* removed
-    else if (tolower(board(prev)->to_ascii()) == 'r')
-        return board(prev)->legal_capture_shape(prev, king); // if prev is a rook
-		*/
     else
         return board(prev)->legal_capture_shape(prev, king) && !itw(prev, king); // if prev is anything else
 
@@ -199,18 +206,18 @@ bool Chess::in_mate(bool white) const {
 	    for (char b = '1'; j <='8'; j++) {
 	      endm = make_pair(a,b);
           // TODO compiler error here: check_move() is not const
-	      if (check_move(startm , endm)){//checks every possible move for a legal move
-		return false;// if a legal move is found the player is NOT in mate
+	      //if (check_move(startm , endm)){//checks every possible move for a legal move
+		//return false;// if a legal move is found the player is NOT in mate
 	      }
 	    }
 	  }
 	}
       }
     }
-  
-  return true;// if not legal moves are found they are in a mate
+    return false; // debug, for noew 
+  //return true;// if not legal moves are found they are in a mate
 }
-
+//}
 
 bool Chess::in_stalemate(bool white) const {
     return (in_mate(white) != in_check(white));

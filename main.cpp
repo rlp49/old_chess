@@ -114,8 +114,8 @@ int main(int argc, char* argv[]) {
 					  argument << " ) = " << argument.length() << std::endl;
 				// And make the move
 				} else {
-					chess.make_move(std::make_pair(argument[0], argument[1]),
-							std::make_pair(argument[2], argument[3]));
+					chess.make_move(std::make_pair(tolower(argument[0]), argument[1]),
+							std::make_pair(tolower(argument[2]), argument[3]));
 				}
 				break;
 			}

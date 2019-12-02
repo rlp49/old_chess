@@ -11,29 +11,34 @@ bool Chess::itw(pair<char, char> start, pair<char, char> end) const {
     int cRank = end.second - start.second;
     int addF;
     int addR;
+
+    if((abs(cFile) != abs(cRank)) && cFile != 0 && cRank != 0){
+      return false;
+    }
     
-		//if knight, just return false
-		if(tolower(board(start)->to_ascii()) == 'n') return false; 
-		//maybe add other checks, if mystery piece is also a jumper? if time permits
+    //if knight, just return false
+    //if(tolower(board(start)->to_ascii()) == 'n') return false; 
+    //maybe add other checks, if mystery piece is also a jumper? if time permits
     if (cFile < 0)
-        addF = -1;
+      addF = -1;
     else if(cFile ==0)
-        addF = 0;
+      addF = 0;
     else
-        addF = 1;
+      addF = 1;
     
     if (cRank < 0)
-        addR = -1;
+      addR = -1;
     else if(cRank ==0)
-        addR = 0;
+      addR = 0;
     else
-        addR = 1;
+      addR = 1;
     
-		pair<char, char> steps = make_pair(start.first + addF, start.second + addR);
-		while(!(steps.first == end.first && steps.second == end.second)) {
-			steps = make_pair(steps.first + addF, steps.second + addR);
-			if(board(steps) != nullptr) return true;
-		}
+    pair<char, char> steps = make_pair(start.first + addF, start.second + addR);
+    while(!(steps.first == end.first && steps.second == end.second)) {
+      if(board(steps) != nullptr) return true;
+      steps = make_pair(steps.first + addF, steps.second + addR);
+      
+    }
 
     return false; // return false if no pieces in the way
 }
@@ -129,10 +134,14 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
         }
     }
     else if(tolower(piece->to_ascii()) == 'p'){
-        if (!piece->legal_capture_shape(start,end)){
+        if (piece->legal_capture_shape(start,end)){
 	        cout << "Invalid Move" << endl;
 	        return false;
         }
+    }
+    else {
+      cout << "Invalid Move" << endl;
+      return false;
     }
     // make the move
     Board board_old = board; // make a copy of old board in case we need to undo the move, make sure it has a copy constructor
@@ -145,9 +154,20 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
         return false;
     }
 
+    if(tolower(piece->to_ascii()) == 'p') {
+      if(piece->is_white() && end.second == '8'){
+	board.remove_piece(end);
+	board.add_piece(end,'Q');
+      }
+      if(!piece->is_white() && end.second == '1'){
+	board.remove_piece(end);
+	board.add_piece(end,'q');
+      }
+    }
+
     // update the last moved piece
     //prev = end;
-
+    is_white_turn = !is_white_turn;
     return true;
 }
 

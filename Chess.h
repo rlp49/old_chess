@@ -53,6 +53,9 @@ private:
 	// Is it white's turn?
 	bool is_white_turn;
 
+    std::pair<char,char> black_king;
+    std::pair<char,char> white_king;
+
 };
 
 // Writes the board out to a stream

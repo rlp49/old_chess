@@ -116,6 +116,10 @@ Chess::Chess() : is_white_turn(true) { // constructor for Chess
 	board.add_piece(std::pair<char, char>( 'A'+4 , '1'+0 ) , 'K' );
 	board.add_piece(std::pair<char, char>( 'A'+3 , '1'+7 ) , 'q' );
 	board.add_piece(std::pair<char, char>( 'A'+4 , '1'+7 ) , 'k' );
+
+    // store location of kings
+    black_king = std::pair<char, char>( 'A'+4 , '1'+7 );
+    white_king = std::pair<char, char>( 'A'+4 , '1'+0 );
 }
 
 bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
@@ -202,8 +206,12 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
       }
     }
     
-    // update the last moved piece
-    //prev = end;
+    // update location of king
+    if(piece->to_ascii() == 'K')
+        white_king = start;
+    else if (piece->to_ascii() == 'k')
+        black_king = start;
+
     is_white_turn = !is_white_turn;
     return true;
 }
@@ -211,37 +219,35 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
 
 bool Chess::in_check(bool white) const {
   // check if the king is threatened in the current board state
-  
-    // TODO Direct check. Test if the king is currently in check from the opponents move.
-  pair<char, char> prev;  // game needs to somehow keep track on the previous move as a field
-    pair<char, char> king;  // also should keep track of king as a field or loop through board to find manually
-    
-    
-    // for debug, remove later
-    if (board(prev) == nullptr)
-      return false;
-    if (board(king) == nullptr)
-      return false;
-    
-    // returns true if prev has a legal move to capture and no piece in the way (if not rook)
-    if (tolower(board(prev)->to_ascii()) == 'p')
-      return board(prev)->legal_capture_shape(prev, king); // if prev is a pawn
+ 
+    // get location of the player's king
+    pair<char, char> king;  
+    if (white)
+        king = white_king;
     else
-      return board(prev)->legal_capture_shape(prev, king) && !itw(prev, king); // if prev is anything else
-    
-    // TODO Discovered check. Test if the king is put into check by your own move.
+        king = black_king;
     
     // looping through the entire board to chech each piece
-    for (int i = 0; i < 8; i++) {
-      for (int j = 0; i < 8; j++) {
-	  pair<char, char> piece = make_pair(i+'A', j+'0');
-            if (board(piece)->is_white() != white) { // check if piece on board is opposite player's 
-	      if (tolower(board(piece)->to_ascii()) == 'p')
-		  if(board(piece)->legal_capture_shape(piece, king)) return true;
-		    else
-		  if(board(piece)->legal_capture_shape(piece, king) && !itw(piece, king)) return true; 
-            }
+    for (char i = 'A'; i <= 'H'; i++) {
+      for (char j = '1'; i <= '8'; j++) {
+	    pair<char, char> piece = make_pair(i, j);
+        
+        if (board(piece) == nullptr)
+            continue; // pass if piece doesn't exist
+
+        if (board(piece)->is_white() == white)
+            continue; // pass if piece is same color as the king
+
+        // only knight's can jump over other pieces so no need to check for in the way pieces
+        if (tolower(board(piece)->to_ascii() == 'k') && 
+            board(piece)->legal_capture_shape(piece, king)) {
+            return true;
         }
+        
+        // for all other pieces
+        if(board(piece)->legal_capture_shape(piece, king) && !itw(piece, king)) 
+            return true; 
+      }
     }
     
     return false;

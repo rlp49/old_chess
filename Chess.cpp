@@ -93,6 +93,7 @@ Chess::Chess() : is_white_turn(true) { // constructor for Chess
 bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
     // check if start is a piece
     const Piece* piece = board(start);
+    bool othph = false;
     if (piece == nullptr)
     {
         cout << "No piece at starting pos" << endl;
@@ -116,15 +117,23 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
     //Check if Piece at end is of the same color
     if (board(end) != nullptr){
         if (piece->is_white() == board(end)->is_white()){
-	        cout << "Your piece occupies that square" << endl;
-	        return false;
+	  cout << "Your piece occupies that square" << endl;
+	  return false;
         }
+	else{
+	  othph = true;
+	}
     }
 
-    
+    bool pawnall = true;
+    if (tolower(piece->to_ascii()) == 'p'){
+      if(othph){
+	pawnall = false;
+      }
+    }
 
     // call valid_move for the piece
-    if(piece->legal_move_shape(start, end)){
+    if(piece->legal_move_shape(start, end) && pawnall){
         // if not knight, check if there are no pieces in between
         if(tolower(piece->to_ascii()) != 'n'){
             if (itw(start, end)) {

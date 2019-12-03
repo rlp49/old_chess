@@ -170,7 +170,7 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
 	}
       }
     }
-    else if(tolower(piece->to_ascii()) == 'p'){
+    else if(tolower(piece->to_ascii()) == 'p' && !pawnall){
       if (!(piece->legal_capture_shape(start,end))){
 	cout << "Invalid Move" << endl;
 	  return false;

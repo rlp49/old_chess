@@ -175,7 +175,8 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
       }
     }
     else if(tolower(piece->to_ascii()) == 'p' && !pawnall){
-      if (!(piece->legal_capture_shape(start,end))){
+      if
+      (!(piece->legal_capture_shape(start,end))){
 	cout << "Invalid Move" << endl;
 	  return false;
       }
@@ -208,9 +209,9 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
     
     // update location of king
     if(piece->to_ascii() == 'K')
-        white_king = start;
+        white_king = end;
     else if (piece->to_ascii() == 'k')
-        black_king = start;
+        black_king = end;
 
     is_white_turn = !is_white_turn;
     return true;
@@ -226,30 +227,39 @@ bool Chess::in_check(bool white) const {
         king = white_king;
     else
         king = black_king;
-    
+    //cout << "location of king: " << king.first << king.second << endl; 
     // looping through the entire board to chech each piece
     for (char i = 'A'; i <= 'H'; i++) {
-      for (char j = '1'; i <= '8'; j++) {
-	    pair<char, char> piece = make_pair(i, j);
-        
-        if (board(piece) == nullptr)
-            continue; // pass if piece doesn't exist
+        for (char j = '1'; j <= '8'; j++) {
+	        pair<char, char> piece = make_pair(i, j);
+            //cout << "checking pair: " << piece.first << piece.second << endl; 
+            if (board(piece) == nullptr) {
+                //cout << "nothing at " << piece.first << piece.second << endl;
+                continue; // pass if piece doesn't exist
+            }
 
-        if (board(piece)->is_white() == white)
-            continue; // pass if piece is same color as the king
+            if (board(piece)->is_white() == white || !board(piece)->is_white() == !white) {
+                //cout << "piece at " << piece.first << piece.second << " is the same color" << endl;
+                continue; // pass if piece is same color as the king
+            }
 
         // only knight's can jump over other pieces so no need to check for in the way pieces
-        if (tolower(board(piece)->to_ascii() == 'k') && 
-            board(piece)->legal_capture_shape(piece, king)) {
-            return true;
-        }
+            if (tolower(board(piece)->to_ascii() == 'k') && 
+                //cout << "piece at " << piece.first << piece.second << " is a knight" << endl;
+                board(piece)->legal_capture_shape(piece, king)) {
+                cout << "put in check by: " << piece.first << piece.second << endl;
+                return true;
+            }
         
         // for all other pieces
-        if(board(piece)->legal_capture_shape(piece, king) && !itw(piece, king)) 
-            return true; 
-      }
+            if(board(piece)->legal_capture_shape(piece, king) && !itw(piece, king)) {
+                cout << "put in check by: " << piece.first << piece.second << endl;
+                return true; 
+            }
+
+            //cout << "piece: " << board(piece)->to_ascii() << " does not threaten king" << endl;
+        }
     }
-    
     return false;
 }
 

@@ -7,53 +7,81 @@ using std::pair; using std::make_pair;
 
 // added function itw() to check for in the way pieces
 bool Chess::itw(pair<char, char> start, pair<char, char> end) const {
-    int cFile = end.first - start.first;
-    int cRank = end.second - start.second;
-    int addF;
-    int addR;
-
-    if((abs(cFile) != abs(cRank)) && cFile != 0 && cRank != 0){
-      return false;
-    }
+  int cFile = end.first - start.first;
+  int cRank = end.second - start.second;
+  int addF;
+  int addR;
+  
+  if((abs(cFile) != abs(cRank)) && cFile != 0 && cRank != 0){
+    return false;
+  }
+  
+  //if knight, just return false
+  //if(tolower(board(start)->to_ascii()) == 'n') return false; 
+  //maybe add other checks, if mystery piece is also a jumper? if time permits
+  if (cFile < 0)
+    addF = -1;
+  else if(cFile ==0)
+    addF = 0;
+  else
+    addF = 1;
+  
+  if (cRank < 0)
+    addR = -1;
+  else if(cRank ==0)
+    addR = 0;
+  else
+    addR = 1;
+  
+  pair<char, char> steps = make_pair(start.first + addF, start.second + addR);
+  while(!(steps.first == end.first && steps.second == end.second)) {
+    if(board(steps) != nullptr) return true;
+    steps = make_pair(steps.first + addF, steps.second + addR);
     
-    //if knight, just return false
-    //if(tolower(board(start)->to_ascii()) == 'n') return false; 
-    //maybe add other checks, if mystery piece is also a jumper? if time permits
-    if (cFile < 0)
-      addF = -1;
-    else if(cFile ==0)
-      addF = 0;
-    else
-      addF = 1;
-    
-    if (cRank < 0)
-      addR = -1;
-    else if(cRank ==0)
-      addR = 0;
-    else
-      addR = 1;
-    
-    pair<char, char> steps = make_pair(start.first + addF, start.second + addR);
-    while(!(steps.first == end.first && steps.second == end.second)) {
-      if(board(steps) != nullptr) return true;
-      steps = make_pair(steps.first + addF, steps.second + addR);
-      
-    }
-
-    return false; // return false if no pieces in the way
+  }
+  
+  return false; // return false if no pieces in the way
 }
 
 bool Chess::check_move(std::pair<char, char> start, std::pair<char, char> end) {
   Board board_old = board;//makes the board revert back to orginal
-  if(make_move(start, end)){
-    board = board_old;
-    return true;
-  }
-  else{
-    return false;
-  }
+  Board test_board = board;
+  //if(make_move(start, end)){
+  //board = board_old;
+  return true;
+    //}
+    //else{
+    //return false;
+    // }
 }
-      
+
+bool Chess::no_legal_moves(bool white){
+  //Iterate through all peieces with every possible move
+  pair<char,char> startm;
+  pair<char,char> endm;
+  
+  for (char i = 'A'; i <='H'; i++){
+    for (char j = '1'; j <='8'; j++) {
+      startm =  make_pair(i,j);
+      if(board(startm)){//Finds is a piece exists
+	if((white && board(startm)->is_white()) || !(white || board(startm)->is_white())){ // Check if it a piece that is the turns color
+	  for (char a = 'A'; i <='H'; i++){
+	    for (char b = '1'; j <='8'; j++) {
+	      endm = make_pair(a,b);
+	      // TODO compiler error here: check_move() is not const
+	      if (check_move(startm , endm)){//checks every possible move for a legal move
+		return false;// if a legal move is found the player is NOT in mate
+	      }
+	    }
+	  }
+	}
+      }
+    }
+  }
+
+return true;// if not legal moves are found they are in a mate
+
+}
 
 /////////////////////////////////////
 // DO NOT MODIFY THIS FUNCTION!!!! //
@@ -91,62 +119,62 @@ Chess::Chess() : is_white_turn(true) { // constructor for Chess
 }
 
 bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
-    // check if start is a piece
-    const Piece* piece = board(start);
+  // check if start is a piece
+  const Piece* piece = board(start);
     bool othph = false;
     if (piece == nullptr)
-    {
-        cout << "No piece at starting pos" << endl;
+      {
+      cout << "No piece at starting pos" << endl;
         return false;
     }
-
+    
     // Check if the piece is the current player's piece 
     if (piece->is_white() != turn_white())
-    {
-        cout << "Not your piece" << endl;
-        return false;
+      {
+	cout << "Not your piece" << endl;
+      return false;
     }
-
+    
     // check if end is in bounds of board
     if (!(end.first >= 'A' && end.first <= 'H' && end.second >= '1' && end.second <= '8'))
-    {
-        cout << "end pos is out of bounds" << endl;
+      {
+	cout << "end pos is out of bounds" << endl;
         return false;
-    }
-
+      }
+    
     //Check if Piece at end is of the same color
     if (board(end) != nullptr){
-        if (piece->is_white() == board(end)->is_white()){
-	  cout << "Your piece occupies that square" << endl;
-	  return false;
-        }
-	else{
-	  othph = true;
-	}
+      if (piece->is_white() == board(end)->is_white()){
+	cout << "Your piece occupies that square" << endl;
+	return false;
+      }
+      else{
+	othph = true;
+      }
     }
-
+    
     bool pawnall = true;
     if (tolower(piece->to_ascii()) == 'p'){
       if(othph){
 	pawnall = false;
       }
     }
-
+    
     // call valid_move for the piece
     if(piece->legal_move_shape(start, end) && pawnall){
-        // if not knight, check if there are no pieces in between
-        if(tolower(piece->to_ascii()) != 'n'){
-            if (itw(start, end)) {
-                cout << "Piece in the way" << endl;
-                return false; // if piece is in the way, return false
-            }
-        }
+      // if not knight, check if there are no pieces in between
+      if(tolower(piece->to_ascii()) != 'n'){
+	if (itw(start, end)) {
+	  cout << "Piece in the way" << endl;
+	  return false; // if piece is in the way, return false
+	}
+      }
     }
     else if(tolower(piece->to_ascii()) == 'p'){
-        if (piece->legal_capture_shape(start,end)){
-	        cout << "Invalid Move" << endl;
-	        return false;
-        }
+      if (!(piece->legal_capture_shape(start,end))){
+	cout << "Invalid Move" << endl;
+	  return false;
+      }
     }
     else {
       cout << "Invalid Move" << endl;
@@ -155,14 +183,14 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
     // make the move
     Board board_old = board; // make a copy of old board in case we need to undo the move, make sure it has a copy constructor
     board.move_piece(start, end);
-
+    
     // Check for if this move puts the player in check
     if(in_check(turn_white())){
-        board = board_old; // revert to old board
+      board = board_old; // revert to old board
         cout<< "That puts you in check"<<endl;
         return false;
     }
-
+    
     if(tolower(piece->to_ascii()) == 'p') {
       if(piece->is_white() && end.second == '8'){
 	board.remove_piece(end);
@@ -173,7 +201,7 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
 	board.add_piece(end,'q');
       }
     }
-
+    
     // update the last moved piece
     //prev = end;
     is_white_turn = !is_white_turn;
@@ -182,74 +210,57 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
 
 
 bool Chess::in_check(bool white) const {
-    // check if the king is threatened in the current board state
-
+  // check if the king is threatened in the current board state
+  
     // TODO Direct check. Test if the king is currently in check from the opponents move.
-    pair<char, char> prev;  // game needs to somehow keep track on the previous move as a field
+  pair<char, char> prev;  // game needs to somehow keep track on the previous move as a field
     pair<char, char> king;  // also should keep track of king as a field or loop through board to find manually
-
-   
+    
+    
     // for debug, remove later
     if (board(prev) == nullptr)
-        return false;
+      return false;
     if (board(king) == nullptr)
-        return false;
+      return false;
     
     // returns true if prev has a legal move to capture and no piece in the way (if not rook)
     if (tolower(board(prev)->to_ascii()) == 'p')
-        return board(prev)->legal_capture_shape(prev, king); // if prev is a pawn
+      return board(prev)->legal_capture_shape(prev, king); // if prev is a pawn
     else
-        return board(prev)->legal_capture_shape(prev, king) && !itw(prev, king); // if prev is anything else
-
+      return board(prev)->legal_capture_shape(prev, king) && !itw(prev, king); // if prev is anything else
+    
     // TODO Discovered check. Test if the king is put into check by your own move.
     
     // looping through the entire board to chech each piece
     for (int i = 0; i < 8; i++) {
-        for (int j = 0; i < 8; j++) {
-            pair<char, char> piece = make_pair(i+'A', j+'0');
+      for (int j = 0; i < 8; j++) {
+	  pair<char, char> piece = make_pair(i+'A', j+'0');
             if (board(piece)->is_white() != white) { // check if piece on board is opposite player's 
-                if (tolower(board(piece)->to_ascii()) == 'p')
-                    if(board(piece)->legal_capture_shape(piece, king)) return true;
-                else
-                    if(board(piece)->legal_capture_shape(piece, king) && !itw(piece, king)) return true; 
+	      if (tolower(board(piece)->to_ascii()) == 'p')
+		  if(board(piece)->legal_capture_shape(piece, king)) return true;
+		    else
+		  if(board(piece)->legal_capture_shape(piece, king) && !itw(piece, king)) return true; 
             }
         }
     }
-                    
-	return false;
+    
+    return false;
 }
 
 // NOTE: if we want in_mate to be a const function we can't call check_move() inside it.
 // Need to fix implementation. 
 bool Chess::in_mate(bool white) const { 
-  //Iterate through all peieces with every possible move
-  pair<char,char> startm;
-  pair<char,char> endm;
-  
-  for (char i = 'A'; i <='H'; i++){
-    for (char j = '1'; j <='8'; j++) {
-      startm =  make_pair(i,j);
-      if(board(startm)){//Finds is a piece exists
-	if((white && board(startm)->is_white()) || !(white || board(startm)->is_white())){ // Check if it a piece that is the turns color
-	  for (char a = 'A'; i <='H'; i++){
-	    for (char b = '1'; j <='8'; j++) {
-	      endm = make_pair(a,b);
-          // TODO compiler error here: check_move() is not const
-	      //if (check_move(startm , endm)){//checks every possible move for a legal move
-		//return false;// if a legal move is found the player is NOT in mate
-	      }
-	    }
-	  }
-	}
-      }
-    }
-    return false; // debug, for noew 
-  //return true;// if not legal moves are found they are in a mate
+  Board nex = board;
+  return false;
+  //return(no_legal_moves(white) && in_check(white));
 }
-//}
+
 
 bool Chess::in_stalemate(bool white) const {
-    return (in_mate(white) != in_check(white));
+  //
+  Board nex = board;
+  return false;
+  //return (no_legal_moves(white) && !in_check(white));
 }
 
 

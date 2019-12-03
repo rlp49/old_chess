@@ -11,7 +11,7 @@ main: main.o Chess.o Board.o CreatePiece.o
 main.o: main.cpp Chess.h Board.h CreatePiece.h
 	$(CC) $(CFLAGS) -c main.cpp -g
 
-Chess.o: Chess.cpp Chess.h
+Chess.o: Chess.cpp Chess.h 
 	$(CC) $(CFLAGS) -c Chess.cpp -g
 
 Board.o: Board.cpp Board.h CreatePiece.h

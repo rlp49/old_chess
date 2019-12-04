@@ -28,9 +28,11 @@ public:
 	// Attemps to make a move. If successful, the move is made and
 	// the turn is switched white <-> black
 	bool make_move(std::pair<char, char> start, std::pair<char, char> end);
+    bool make_move(std::pair<char, char> start, std::pair<char,char> end, Board& board) const; // overloaded
 
 	// Returns true if the designated player is in check
 	bool in_check(bool white) const;
+    bool in_check(bool white, Board& board) const; // overloaded
 
 	// Returns true if the designated player is in mate
 	bool in_mate(bool white) const;
@@ -40,8 +42,11 @@ public:
 
   //helper function to check if a legal move exists
   bool check_move(std::pair<char, char> start, std::pair<char, char> end);
-    // helper function to check if piece is in the way
-    bool itw(std::pair<char, char> start, std::pair<char, char> end) const;
+    
+  // helper function to check if piece is in the way
+  bool itw(std::pair<char, char> start, std::pair<char, char> end) const;
+  bool itw(std::pair<char,char> start, std::pair<char,char> end, Board& board) const; // overloaded
+
   //helper to check if legal moves exist
   bool no_legal_moves(bool white);
 
@@ -52,9 +57,6 @@ private:
 
 	// Is it white's turn?
 	bool is_white_turn;
-
-    std::pair<char,char> black_king;
-    std::pair<char,char> white_king;
 
 };
 

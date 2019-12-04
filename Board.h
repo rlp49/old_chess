@@ -27,6 +27,9 @@ public:
   // Copy constructor
   Board(const Board& old);
 
+  // asignment operator
+  Board& operator=(const Board& old) {occ = old.occ; return *this;}
+
   // Returns a const pointer to the piece at a prescribed location if it exists,
         // or nullptr if there is nothing there.
   const Piece* operator() (std::pair<char, char> position) const;

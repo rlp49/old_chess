@@ -13,7 +13,7 @@ using std::cout;
 Board::Board(){}
 
 // board copy constructor
-Board Board::Board(const Board& old) {
+Board::Board(const Board& old) {
     occ = old.occ;
 }
 

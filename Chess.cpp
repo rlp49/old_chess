@@ -19,9 +19,6 @@ bool Chess::itw(pair<char, char> start, pair<char, char> end, Board& board) cons
     return false;
   }
   
-  //if knight, just return false
-  //if(tolower(board(start)->to_ascii()) == 'n') return false; 
-  //maybe add other checks, if mystery piece is also a jumper? if time permits
   if (cFile < 0)
     addF = -1;
   else if(cFile ==0)
@@ -45,7 +42,6 @@ bool Chess::itw(pair<char, char> start, pair<char, char> end, Board& board) cons
   
   return false; // return false if no pieces in the way
 }
-
 
 // added function itw() to check for in the way pieces
 bool Chess::itw(pair<char, char> start, pair<char, char> end) const {
@@ -58,9 +54,6 @@ bool Chess::itw(pair<char, char> start, pair<char, char> end) const {
     return false;
   }
   
-  //if knight, just return false
-  //if(tolower(board(start)->to_ascii()) == 'n') return false; 
-  //maybe add other checks, if mystery piece is also a jumper? if time permits
   if (cFile < 0)
     addF = -1;
   else if(cFile ==0)
@@ -83,46 +76,6 @@ bool Chess::itw(pair<char, char> start, pair<char, char> end) const {
   }
   
   return false; // return false if no pieces in the way
-}
-
-bool Chess::check_move(std::pair<char, char> start, std::pair<char, char> end) {
-  Board board_old = board;//makes the board revert back to orginal
-  Board test_board = board;
-  //if(make_move(start, end)){
-  //board = board_old;
-  return true;
-    //}
-    //else{
-    //return false;
-    // }
-}
-
-bool Chess::no_legal_moves(bool white){
-  //Iterate through all peieces with every possible move
-  pair<char,char> startm;
-  pair<char,char> endm;
-  
-  for (char i = 'A'; i <='H'; i++){
-    for (char j = '1'; j <='8'; j++) {
-      startm =  make_pair(i,j);
-      if(board(startm)){//Finds is a piece exists
-	if((white && board(startm)->is_white()) || !(white || board(startm)->is_white())){ // Check if it a piece that is the turns color
-	  for (char a = 'A'; i <='H'; i++){
-	    for (char b = '1'; j <='8'; j++) {
-	      endm = make_pair(a,b);
-	      // TODO compiler error here: check_move() is not const
-	      if (check_move(startm , endm)){//checks every possible move for a legal move
-		return false;// if a legal move is found the player is NOT in mate
-	      }
-	    }
-	  }
-	}
-      }
-    }
-  }
-
-return true;// if not legal moves are found they are in a mate
-
 }
 
 /////////////////////////////////////
@@ -234,7 +187,8 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
         cout<< "That puts you in check"<<endl;
         return false;
     }
-    
+ 
+  // pawn promotion
     if(tolower(piece->to_ascii()) == 'p') {
       if(piece->is_white() && end.second == '8'){
 	board.remove_piece(end);
@@ -326,27 +280,18 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end, Bo
     return true;
 }
 
-
 bool Chess::in_check(bool white) const {
-  // check if the king is threatened in the current board state
-  //cout << "running in_check()" << endl; 
-    // get location of the player's king
     pair<char, char> king;  
-    //cout << 346;
     for (char i = 'A'; i <= 'H'; i++) {
-      //cout << 348;
       for (char j = '1'; j <= '8'; j++) {
-        //cout << 350;
         pair<char,char> piece = make_pair(i,j);
         if (board(piece) == nullptr) {
           continue;
         }
-        //cout << 355;
         if (board(piece)->to_ascii() == 'K' && white) {
           king = piece;
           break;
         }
-        //cout << 360;
         if (board(piece)->to_ascii() == 'k' && !white) {
           king = piece;
           break;
@@ -437,9 +382,7 @@ bool Chess::in_check(bool white, Board& board) const {
     return false;
 }
 
-
-// NOTE: if we want in_mate to be a const function we can't call check_move() inside it.
-// Need to fix implementation. 
+// checks for legal moves for all pieces, returns true if no legal moves found
 bool Chess::in_stalemate(bool white) const { 
   Board board = this->board;
   vector<pair<char,char>> pieces; // vector storing pieces to check moves with
@@ -483,7 +426,6 @@ bool Chess::in_mate(bool white) const {
   return (in_check(white) && in_stalemate(white)); 
 }
 
-
 /////////////////////////////////////
 // DO NOT MODIFY THIS FUNCTION!!!! //
 /////////////////////////////////////
@@ -522,5 +464,7 @@ std::istream& operator>> (std::istream& is, Chess& chess) {
     chess.is_white_turn = true;
   if(c == 'b') 
     chess.is_white_turn = false;
+
+  // need to implement way to put move commands from .txt
   return is;
 }   

@@ -24,6 +24,8 @@ public:
   // Default constructor
   Board();
   
+  // board copy constructor
+  Board(Board& old);
   // Returns a const pointer to the piece at a prescribed location if it exists,
         // or nullptr if there is nothing there.
   const Piece* operator() (std::pair<char, char> position) const;
@@ -47,7 +49,14 @@ public:
   
   // Returns true if the board has the right number of kings on it
   bool has_valid_kings() const;
-  
+
+    bool check_move(std::pair<char, char> start, std::pair<char, char> end);
+
+    bool make_move(std::pair<char, char> start, std::pair<char, char> end);
+
+    bool in_check(bool white);
+    
+    bool itw(std::pair<char, char> start, std::pair<char, char> end);
 private:
 	// The sparse map storing the pieces, keyed off locations
 	std::map<std::pair<char, char>, Piece*> occ;

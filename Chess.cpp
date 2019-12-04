@@ -452,7 +452,7 @@ std::istream& operator>> (std::istream& is, Chess& chess) {
       is.get(c);
       //std::cout << c;
       coord = make_pair(l, k);
-      if(c=='p'||c=='P'||c=='k'||c=='K'||c=='n'||c=='N'||c=='q'||c=='Q'||c=='r'||c=='R'||c=='b'||c=='B') {
+      if(c=='p'||c=='P'||c=='k'||c=='K'||c=='n'||c=='N'||c=='q'||c=='Q'||c=='r'||c=='R'||c=='b'||c=='B'||c=='M'||c=='m') {
         chess.board.add_piece(coord, c);
       }
     }

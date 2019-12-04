@@ -13,8 +13,9 @@ using std::cout;
 /////////////////////////////////////
 Board::Board(){}
 
-Board::Board(Board& old) {
-  occ = old.occ;
+// board copy constructor
+Board::Board(const Board& old) {
+    occ = old.occ;
 }
 
 bool Board::remove_piece(std::pair<char,char> pos) {
@@ -26,13 +27,9 @@ bool Board::remove_piece(std::pair<char,char> pos) {
 }
 
 bool Board::move_piece(std::pair<char,char> start, std::pair<char,char> end) {
-  if (occ[end] != nullptr) // if end pos has a piece, need to delete it first
-    delete occ[end];
-  
-  // move piece and delete start
-  occ[end] = occ[start];
+    // move piece and delete start
+    occ[end] = occ[start];
     remove_piece(start);
-
     return true;
 }
 //returns pointer to position if it exists on board
@@ -66,7 +63,7 @@ bool Board::add_piece(std::pair<char, char> position, char piece_designator) {
 //instructions only say to check if there are two kings,
 //not necessarily of different colors, so...
 bool Board::has_valid_kings() const { 
-	int count = 0
+	int count = 0;
 	std::stringstream ss;
 	ss << *this; //basically get_board()
 	char c;

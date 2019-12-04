@@ -6,6 +6,7 @@
 class King : public Piece {
 
 public:
+  virtual ~King(){}
 	bool legal_move_shape(std::pair<char, char> start, std::pair<char, char> end) const {
 		/////////////////////////
 		// [REPLACE THIS STUB] //

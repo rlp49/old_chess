@@ -1,6 +1,7 @@
 #include <iostream>
 #include <utility>
 #include <map>
+#include <sstream>
 #include "Board.h"
 #include "CreatePiece.h"
 
@@ -64,16 +65,18 @@ bool Board::add_piece(std::pair<char, char> position, char piece_designator) {
 
 //instructions only say to check if there are two kings,
 //not necessarily of different colors, so...
-bool Board::has_valid_kings() const {
-	int count = 0;
-	for(char r = '8'; r >= '1'; r--) {
-		for(char c = 'A'; c <= 'H'; c++) {
-			if(occ.at(make_pair(c,r))->to_ascii() == 'K' || occ.at(make_pair(c,r))->to_ascii() == 'k') 
-				count += 1;
-		}
-	}	
+bool Board::has_valid_kings() const { 
+	int count = 0
+	std::stringstream ss;
+	ss << *this; //basically get_board()
+	char c;
+	while(ss >> c) {
+		if(c == 'K' || c == 'k')
+			count++;
+	}
 	if(count == 2)
 		return true;
+	return false;
 }
 
 void Board::display() const {

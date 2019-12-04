@@ -2,10 +2,15 @@
 #define QUEEN_H
 
 #include "Piece.h"
+#include <cmath>
+#include <iostream>
 
 class Queen : public Piece {
 
 public:
+  ~Queen(){
+    std::cout << "object being deleted" << std::endl;
+  }
 	bool legal_move_shape(std::pair<char, char> start, std::pair<char, char> end) const {
         // combination of rook and bishop
 	  if ((start.first == end.first || start.second == end.second) || (abs(start.first - end.first) == abs(start.second - end.second))){

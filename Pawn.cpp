@@ -1,7 +1,7 @@
 #include "Pawn.h"
 
-Pawn::Pawn(bool color){
-  white = color;
-}
+//Pawn::Pawn(bool color){
+//  white = color;
+//}
 
 

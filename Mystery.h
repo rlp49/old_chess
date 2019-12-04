@@ -10,6 +10,7 @@
 class Mystery : public Piece {
 
 public:
+  virtual ~Mystery(){}
 	bool legal_move_shape(std::pair<char, char> start, std::pair<char, char> end) const {
 		(void) start;//meaningless statement helps avoid unused parameter warning for now
 		(void) end;  //meaningless statement helps avoid unused parameter warning for now

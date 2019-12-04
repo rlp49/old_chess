@@ -26,9 +26,6 @@ bool Board::remove_piece(std::pair<char,char> pos) {
 }
 
 bool Board::move_piece(std::pair<char,char> start, std::pair<char,char> end) {
-    if (occ[end] != nullptr) // if end pos has a piece, need to delete it first
-        delete occ[end];
-
     // move piece and delete start
     occ[end] = occ[start];
     remove_piece(start);

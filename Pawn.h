@@ -6,6 +6,7 @@
 class Pawn : public Piece {
 
 public:
+  virtual ~Pawn() {}
 	bool legal_move_shape(std::pair<char, char> start, std::pair<char, char> end) const {
 	  if (is_white()){
 	    if(start.second == (end.second - 1) && start.first == end.first){

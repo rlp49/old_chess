@@ -329,7 +329,7 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end, Bo
 
 bool Chess::in_check(bool white) const {
   // check if the king is threatened in the current board state
-  cout << "running in_check()" << endl; 
+  //cout << "running in_check()" << endl; 
     // get location of the player's king
     pair<char, char> king;  
     //cout << 346;
@@ -388,7 +388,7 @@ bool Chess::in_check(bool white) const {
 
 // overloaded in_check()
 bool Chess::in_check(bool white, Board& board) const {
-   cout << "running overloaded in_check()" << endl; 
+   //cout << "running overloaded in_check()" << endl; 
     pair<char, char> king;  
     // loop to find the king
     for (char i = 'A'; i <= 'H'; i++) {
@@ -466,8 +466,7 @@ bool Chess::in_mate(bool white) const {
         pair<char,char> move = make_pair(j,k); // create a possible move
         Board old = board; // make a copy of board to undo the move
         if (make_move(cur, move, board)) {
-          cout << "not in check" << endl;
-          cout << "you can move: " << cur.first << cur.second << " to " << move.first << move.second << endl;
+          cout << "Not in check. You can move: " << cur.first << cur.second << " to " << move.first << move.second << endl;
           cout << board;
           return false; // if move was succesful and not in check anymore
         }

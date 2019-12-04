@@ -23,6 +23,10 @@ class Board {
 public:
   // Default constructor
   Board();
+  
+  //Board destructor 
+  ~Board(){
+  };
 
   // Copy constructor
   Board(const Board& old);

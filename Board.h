@@ -23,7 +23,10 @@ class Board {
 public:
   // Default constructor
   Board();
-  
+
+  // Copy constructor
+  Board(const Board& old);
+
   // Returns a const pointer to the piece at a prescribed location if it exists,
         // or nullptr if there is nothing there.
   const Piece* operator() (std::pair<char, char> position) const;

@@ -12,6 +12,11 @@ using std::cout;
 /////////////////////////////////////
 Board::Board(){}
 
+// board copy constructor
+Board Board::Board(const Board& old) {
+    occ = old.occ;
+}
+
 bool Board::remove_piece(std::pair<char,char> pos) {
     if (occ[pos] != nullptr) { // check if there actually is a piece there before deleting it
         occ.erase(pos);

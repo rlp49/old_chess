@@ -493,10 +493,34 @@ std::ostream& operator<< (std::ostream& os, const Chess& chess) {
 	return os << chess.get_board() << (chess.turn_white() ? 'w' : 'b');
 }
 
-
 std::istream& operator>> (std::istream& is, Chess& chess) {
-	/////////////////////////
-	// [REPLACE THIS STUB] //
-	/////////////////////////
-	return is;
-}
+
+  //clearing current board
+  std::pair<char, char> coord;
+  for(char i = 'A'; i <= 'H'; i++) {
+    for(char j = '1'; j <= '8'; j++) {
+      coord = make_pair(i, j);
+      chess.board.remove_piece(coord);
+    }
+  }
+  
+  char c;
+  for(char k = '8'; k >= '1'; k--) {
+    for(char l = 'A'; l <= 'H'; l++) {
+      is.get(c);
+      //std::cout << c;
+      coord = make_pair(l, k);
+      if(c=='p'||c=='P'||c=='k'||c=='K'||c=='n'||c=='N'||c=='q'||c=='Q'||c=='r'||c=='R'||c=='b'||c=='B') {
+        chess.board.add_piece(coord, c);
+      }
+    }
+    is.get(c);
+    //std::cout << c;
+  }
+  is.get(c);
+  if(c == 'w') 
+    chess.is_white_turn = true;
+  if(c == 'b') 
+    chess.is_white_turn = false;
+  return is;
+}   

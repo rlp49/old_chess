@@ -50,6 +50,8 @@ public:
   //helper to check if legal moves exist
   bool no_legal_moves(bool white);
 
+  friend std::istream& operator>> (std::istream& is, Chess& chess);
+
   
 private:
 	// The board

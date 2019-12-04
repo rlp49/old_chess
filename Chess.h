@@ -42,7 +42,7 @@ public:
     
   // helper function to check if piece is in the way
   bool itw(std::pair<char, char> start, std::pair<char, char> end) const;
-  bool itw(std::pair<char,char> start, std::pair<char,char> end, Board& board) const; // overloaded
+    bool itw(std::pair<char,char> start, std::pair<char,char> end, Board& board) const; // overloaded
   friend std::istream& operator>> (std::istream& is, Chess& chess);
 
   
@@ -58,9 +58,5 @@ private:
 // Writes the board out to a stream
 std::ostream& operator<< (std::ostream& os, const Chess& chess);
 
-/*
-// Reads the board in from a stream
-std::istream& operator>> (std::istream& is, Chess& chess);
-*/
 
 #endif // CHESS_H

@@ -167,8 +167,10 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
       }
     }
     else if(tolower(piece->to_ascii()) == 'p' && !pawnall){
-      if
-      (!(piece->legal_capture_shape(start,end))){
+      std::cout<< "Here" << std::endl;
+      if((!(piece->legal_capture_shape(start,end)))){
+	std::cout<< "Here2" << std::endl;
+	
 	cout << "Invalid Move" << endl;
 	  return false;
       }
@@ -298,7 +300,7 @@ bool Chess::in_check(bool white) const {
         }
       }
     }
-    cout << "location of king: " << king.first << king.second << endl; 
+    //cout << "location of king: " << king.first << king.second << endl; 
     // looping through the entire board to chech each piece
     for (char i = 'A'; i <= 'H'; i++) {
         for (char j = '1'; j <= '8'; j++) {
@@ -402,16 +404,14 @@ bool Chess::in_stalemate(bool white) const {
   }
 
   // second for loop makes moves with the pieces in vector
-  for (int i = 0; i < pieces.size(); i++) {
+  for (unsigned i = 0; i < pieces.size(); i++) {
     pair<char,char> cur = pieces[i]; // current piece to check moves with
-    cout << "checking piece " << cur.first << cur.second << endl;    
+    //cout << "checking piece " << cur.first << cur.second << endl;    
     for (char j = 'A'; j <= 'H'; j++) {
       for (char k = '1'; k <= '8'; k++) {
         pair<char,char> move = make_pair(j,k); // create a possible move
         Board old = board; // make a copy of board to undo the move
         if (make_move(cur, move, board)) {
-          cout << "Not in checkmate. You can move: " << cur.first << cur.second << " to " << move.first << move.second << endl;
-          cout << board;
           return false; // if move was succesful and not in check anymore
         }
         board = old; // need asignment operator

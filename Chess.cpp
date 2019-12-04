@@ -168,7 +168,6 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
       if((!(piece->legal_capture_shape(start,end)))) 	
 				cout << "Invalid Move" << endl;
 	  	return false;
-      }
     }
     else {
       cout << "Invalid Move" << endl;
@@ -299,7 +298,7 @@ bool Chess::in_check(bool white) const {
         continue; // pass if piece is same color as the king
       // checks if king in check
       if(board(piece)->legal_capture_shape(piece, king) && !itw(piece, king)) {
-        cout << "put in check by: " << piece.first << piece.second << endl
+        cout << "put in check by: " << piece.first << piece.second << endl;
         return true; 
   		}
     }

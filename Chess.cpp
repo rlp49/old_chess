@@ -436,22 +436,25 @@ std::istream& operator>> (std::istream& is, Chess& chess) {
 
 	//clearing current board
 	std::pair<char, char> coord;
-	for(int i = 0; i < 8; i++) {
-		for(int j = 0; j < 8; j++) {
-			coord = make_pair('A' + i, '1' + j);
+	for(char i = 'A'; i <= 'H'; i++) {
+		for(char j = '1'; j <= '8'; j++) {
+			coord = make_pair(i, j);
 		  chess.board.remove_piece(coord);
 		}
 	}
 	
 	char c;
-	for(int row = 0; row < 8; row++) {
-		for(int col = 0; col < 8; col++) {
+	for(char k = '8'; k >= '1'; k--) {
+		for(char l = 'A'; l <= 'H'; l++) {
 			is.get(c);
-			coord = make_pair('A' + col, '8' - row);
-			if(c != '-') {
+			//std::cout << c;
+			coord = make_pair(l, k);
+			if(c=='p'||c=='P'||c=='k'||c=='K'||c=='n'||c=='N'||c=='q'||c=='Q'||c=='r'||c=='R'||c=='b'||c=='B') {
 				chess.board.add_piece(coord, c);
 			}
 		}
+		is.get(c);
+		//std::cout << c;
 	}
 	is.get(c);
 	if(c == 'w') 

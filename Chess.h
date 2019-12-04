@@ -47,7 +47,7 @@ public:
 
   bool itw1(std::pair<char, char> start, std::pair<char, char> end, std::pair<char, char> was, std::pair<char, char> is) const;
 
-  bool in_check1(bool white,  std::pair<char, char> was, std::pair<char, char> is) const;
+  bool in_check1(bool white,  std::pair<char, char> was, std::pair<char, char> is,bool kingm) const;
   //helper for << operator
   //void set_turn(char c);
   //Reads board in from a stream

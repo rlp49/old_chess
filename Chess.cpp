@@ -106,8 +106,8 @@ bool Chess::no_legal_moves(bool white) const{
 	      endm = make_pair(a,b);
 	      // TODO compiler error here: check_move() is not const
 	      if (check_move(startm , endm, white)){//checks every possible move for a legal move
-		//std::cout << q << " " << z << std::endl;
-		//std::cout << a << " " << b << std::endl << std::endl;;
+		std::cout << q << " " << z << std::endl;
+		std::cout << a << " " << b << std::endl << std::endl;;
 		
 		return false;// if a legal move is found the player is NOT in mate
 	      }
@@ -305,8 +305,13 @@ bool Chess::check_move(std::pair<char, char> start, std::pair<char, char> end, b
     else {
       return false;
     }
+
+    bool kingm =false;
+    if(tolower(piece->to_ascii()) == 'k'){
+      kingm = true;
+    }
     //std::cout<< "here" << std::endl;
-    if(in_check1(white, start, end)){
+    if(in_check1(white, start, end, kingm)){
       return false;
     }
     else{
@@ -316,7 +321,7 @@ bool Chess::check_move(std::pair<char, char> start, std::pair<char, char> end, b
     
 }
 
-bool Chess::in_check1(bool white,std::pair<char, char> was, std::pair<char, char> is) const {
+bool Chess::in_check1(bool white,std::pair<char, char> was, std::pair<char, char> is, bool kingm) const {
   // check if the king is threatened in the current board state
   
   // get location of the player's king
@@ -325,6 +330,10 @@ bool Chess::in_check1(bool white,std::pair<char, char> was, std::pair<char, char
     king = white_king;
   else
     king = black_king;
+
+  if(kingm){
+    king = is;
+  }
   //cout << "location of king: " << king.first << king.second << endl; 
   // looping through the entire board to chech each piece
   for (char i = 'A'; i <= 'H'; i++) {

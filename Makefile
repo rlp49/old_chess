@@ -4,8 +4,8 @@ CFLAGS=-std=c++11 -pedantic -Wall -Wextra
 # Someone double check the makefile!!!
 
 # target executable
-main: main.o Chess.o Board.o CreatePiece.o
-	$(CC) -o main main.o Chess.o Board.o CreatePiece.o
+main: main.o Chess.o Board.o CreatePiece.o Pawn.o Rook.o Knight.o Bishop.o Queen.o King.o Mystery.o
+	$(CC) -o main main.o Chess.o Board.o CreatePiece.o Pawn.o Rook.o Knight.o Bishop.o Queen.o King.o Mystery.o
 
 # target object files
 main.o: main.cpp Chess.h Board.h CreatePiece.h
@@ -37,6 +37,9 @@ Queen.o: Queen.cpp Queen.h
 
 King.o: King.cpp King.h
 	$(CC) $(CFLAGS) -c King.cpp
+
+Mystery.o: Mystery.cpp Mystery.h
+	$(CC) $(CFLAGS) -c Mystery.cpp
 
 clean:
 	rm -f *.o main

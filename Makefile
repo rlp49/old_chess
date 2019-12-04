@@ -42,4 +42,4 @@ King.o: King.cpp King.h
 #	$(CC) $(CFLAGS) -c Mystery.h
 
 clean:
-	rm -f *.o main
+	rm -f *.o chess

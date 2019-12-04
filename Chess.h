@@ -44,7 +44,10 @@ public:
     bool itw(std::pair<char, char> start, std::pair<char, char> end) const;
   //helper to check if legal moves exist
   bool no_legal_moves(bool white);
-
+	//helper for << operator
+	//void set_turn(char c);
+	//Reads board in from a stream
+	friend std::istream& operator>> (std::istream& is, Chess& chess);
   
 private:
 	// The board
@@ -61,8 +64,9 @@ private:
 // Writes the board out to a stream
 std::ostream& operator<< (std::ostream& os, const Chess& chess);
 
+/*
 // Reads the board in from a stream
 std::istream& operator>> (std::istream& is, Chess& chess);
-
+*/
 
 #endif // CHESS_H

@@ -43,18 +43,6 @@ bool Chess::itw(pair<char, char> start, pair<char, char> end) const {
   return false; // return false if no pieces in the way
 }
 
-bool Chess::check_move(std::pair<char, char> start, std::pair<char, char> end) {
-  Board board_old = board;//makes the board revert back to orginal
-  Board test_board = board;
-  //if(make_move(start, end)){
-  //board = board_old;
-  return true;
-    //}
-    //else{
-    //return false;
-    // }
-}
-
 bool Chess::no_legal_moves(bool white){
   //Iterate through all peieces with every possible move
   pair<char,char> startm;
@@ -64,23 +52,21 @@ bool Chess::no_legal_moves(bool white){
     for (char j = '1'; j <='8'; j++) {
       startm =  make_pair(i,j);
       if(board(startm)){//Finds is a piece exists
-	if((white && board(startm)->is_white()) || !(white || board(startm)->is_white())){ // Check if it a piece that is the turns color
-	  for (char a = 'A'; i <='H'; i++){
-	    for (char b = '1'; j <='8'; j++) {
-	      endm = make_pair(a,b);
+				if((white && board(startm)->is_white()) || !(white || board(startm)->is_white())){ // Check if it a piece that is the turns color
+	  			for (char a = 'A'; i <='H'; i++){
+	    			for (char b = '1'; j <='8'; j++) {
+	      			endm = make_pair(a,b);
 	      // TODO compiler error here: check_move() is not const
-	      if (check_move(startm , endm)){//checks every possible move for a legal move
+	      			if (check_move(startm , endm)){//checks every possible move for a legal move
 		return false;// if a legal move is found the player is NOT in mate
-	      }
-	    }
-	  }
-	}
+	      			}
+	    			}
+	  			}	
+				}
       }
     }
   }
-
-return true;// if not legal moves are found they are in a mate
-
+	return true;// if not legal moves are found they are in a mate
 }
 
 /////////////////////////////////////
@@ -228,7 +214,7 @@ bool Chess::check_move(std::pair<char, char> start, std::pair<char, char> end) {
     
     // Check if the piece is the current player's piece 
     if (piece->is_white() != turn_white())
-      return false
+      return false;
     
     // check if end is in bounds of board
     if (!(end.first >= 'A' && end.first <= 'H' && end.second >= '1' && end.second <= '8'))
@@ -358,7 +344,6 @@ bool Chess::in_stalemate(bool white) const {
   //return (no_legal_moves(white) && !in_check(white));
 }
 
-
 /////////////////////////////////////
 // DO NOT MODIFY THIS FUNCTION!!!! //
 /////////////////////////////////////
@@ -368,7 +353,6 @@ std::ostream& operator<< (std::ostream& os, const Chess& chess) {
 	return os << chess.get_board() << (chess.turn_white() ? 'w' : 'b');
 }
 
-
 std::istream& operator>> (std::istream& is, Chess& chess) {
 
 	//clearing current board
@@ -376,24 +360,24 @@ std::istream& operator>> (std::istream& is, Chess& chess) {
 	for(int i = 0; i < 8; i++) {
 		for(int j = 0; j < 8; j++) {
 			coord = make_pair('A' + i, '1' + j);
-			remove_piece(coord);
+		  chess.board.remove_piece(coord);
 		}
 	}
 	
 	char c;
-	for(int row = 0; i < 8; i++) {
-		for(int col = 0; j < 8; j++) {
+	for(int row = 0; row < 8; row++) {
+		for(int col = 0; col < 8; col++) {
 			is.get(c);
-			coord = make_pair('A' + j, '1' + i);
+			coord = make_pair('A' + col, '8' - row);
 			if(c != '-') {
-				board.add_piece(coord, c);
+				chess.board.add_piece(coord, c);
 			}
 		}
 	}
 	is.get(c);
 	if(c == 'w') 
-		is_white_turn = true;
-	else
-		is_white_turn = false;
+		chess.is_white_turn = true;
+	if(c == 'b') 
+		chess.is_white_turn = false;
 	return is;
 }

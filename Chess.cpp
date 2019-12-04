@@ -217,6 +217,85 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
     return true;
 }
 
+//like make_move, but only used for checking mates
+//avoid error messages
+bool Chess::check_move(std::pair<char, char> start, std::pair<char, char> end) {
+  // check if start is a piece
+  const Piece* piece = board(start);
+    bool othph = false;
+    if (piece == nullptr)
+        return false;
+    
+    // Check if the piece is the current player's piece 
+    if (piece->is_white() != turn_white())
+      return false
+    
+    // check if end is in bounds of board
+    if (!(end.first >= 'A' && end.first <= 'H' && end.second >= '1' && end.second <= '8'))
+      return false;
+    
+    //Check if Piece at end is of the same color
+    if (board(end) != nullptr){
+      if (piece->is_white() == board(end)->is_white())
+				return false;
+      else
+				othph = true;
+    }
+    
+    bool pawnall = true;
+    if (tolower(piece->to_ascii()) == 'p'){
+      if(othph){
+				pawnall = false;
+      }
+    }
+    
+    // call valid_move for the piece
+    if(piece->legal_move_shape(start, end) && pawnall){
+      // if not knight, check if there are no pieces in between
+      if(tolower(piece->to_ascii()) != 'n'){
+				if (itw(start, end)) {
+	  			return false; // if piece is in the way, return false
+				}
+      }
+    }
+    else if(tolower(piece->to_ascii()) == 'p' && !pawnall){
+      if(!(piece->legal_capture_shape(start,end))){
+	  		return false;
+      }
+    }
+    else {
+      return false;
+    }
+    // make the move
+    Board board_old = board; // make a copy of old board in case we need to undo the move, make sure it has a copy constructor
+    board.move_piece(start, end);
+    
+    // Check for if this move puts the player in check
+    if(in_check(turn_white())){
+      board = board_old; // revert to old board
+        return false;
+    }
+    
+    if(tolower(piece->to_ascii()) == 'p') {
+      if(piece->is_white() && end.second == '8'){
+				board.remove_piece(end);
+				board.add_piece(end,'Q');
+      }
+      if(!piece->is_white() && end.second == '1'){
+				board.remove_piece(end);
+				board.add_piece(end,'q');
+      }
+    }
+    
+    // update location of king
+    if(piece->to_ascii() == 'K')
+        white_king = end;
+    else if (piece->to_ascii() == 'k')
+        black_king = end;
+
+    is_white_turn = !is_white_turn;
+    return true;
+}
 
 bool Chess::in_check(bool white) const {
   // check if the king is threatened in the current board state
@@ -291,8 +370,28 @@ std::ostream& operator<< (std::ostream& os, const Chess& chess) {
 
 
 std::istream& operator>> (std::istream& is, Chess& chess) {
-	/////////////////////////
-	// [REPLACE THIS STUB] //
-	/////////////////////////
+
+	//clearing current board
+	std::pair<char, char> coord;
+	for(int i = 0; i < 8; i++) {
+		for(int j = 0; j < 8; j++) {
+			coord = make_pair('A' + i, '1' + j);
+			remove_piece(coord);
+		}
+	}
+	
+	char c;
+	for(int row = 0; i < 8; i++) {
+		for(int col = 0; j < 8; j++) {
+			is.get(c);
+			coord = make_pair('A' + j, '1' + i);
+			if(c == '-')
+				board.add_piece(
+		}
+	}
+	while(is.get(c)) {
+		
+	}
+	chess.board.;
 	return is;
 }

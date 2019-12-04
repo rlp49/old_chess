@@ -13,9 +13,9 @@ public:
 			 (end.first == start.first - 2 &&
 				(end.second == start.second + 1 || end.second == start.second - 1)) ||
 			 (end.second == start.second + 2 &&
-				(end.first == start.first + 1 || end.first == start.first + 1)) ||
+				(end.first == start.first + 1 || end.first == start.first - 1)) ||
 			 (end.second == start.second - 2 &&
-				(end.first == start.first + 1 || end .first == start.first + 1))) {
+				(end.first == start.first + 1 || end .first == start.first - 1))) {
 			return true;
 		}
 		return false;

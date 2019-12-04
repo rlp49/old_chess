@@ -44,7 +44,7 @@ bool Chess::itw(pair<char, char> start, pair<char, char> end) const {
 }
 
 bool Chess::itw1(std::pair<char, char> start, std::pair<char, char> end, std::pair<char, char> was, std::pair<char, char> is) const {
-   int cFile = end.first - start.first;
+  int cFile = end.first - start.first;
   int cRank = end.second - start.second;
   int addF;
   int addR;
@@ -212,8 +212,10 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
       }
     }
     else if(tolower(piece->to_ascii()) == 'p' && !pawnall){
-      if
-      (!(piece->legal_capture_shape(start,end))){
+      std::cout<< "Here" << std::endl;
+      if((!(piece->legal_capture_shape(start,end)))){
+	std::cout<< "Here2" << std::endl;
+	
 	cout << "Invalid Move" << endl;
 	  return false;
       }

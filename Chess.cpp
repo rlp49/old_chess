@@ -407,6 +407,7 @@ bool Chess::in_check(bool white, Board& board) const {
       }
     }
 
+    // see if any opponent pieces can capture king
     for (char i = 'A'; i <= 'H'; i++) {
         for (char j = '1'; j <= '8'; j++) {
 	        pair<char, char> piece = make_pair(i, j);
@@ -439,7 +440,7 @@ bool Chess::in_check(bool white, Board& board) const {
 
 // NOTE: if we want in_mate to be a const function we can't call check_move() inside it.
 // Need to fix implementation. 
-bool Chess::in_mate(bool white) const { 
+bool Chess::in_stalemate(bool white) const { 
   Board board = this->board;
   vector<pair<char,char>> pieces; // vector storing pieces to check moves with
   
@@ -466,7 +467,7 @@ bool Chess::in_mate(bool white) const {
         pair<char,char> move = make_pair(j,k); // create a possible move
         Board old = board; // make a copy of board to undo the move
         if (make_move(cur, move, board)) {
-          cout << "Not in check. You can move: " << cur.first << cur.second << " to " << move.first << move.second << endl;
+          cout << "Not in checkmate. You can move: " << cur.first << cur.second << " to " << move.first << move.second << endl;
           cout << board;
           return false; // if move was succesful and not in check anymore
         }
@@ -477,13 +478,9 @@ bool Chess::in_mate(bool white) const {
   return true;
 }
 
-
-bool Chess::in_stalemate(bool white) const {
-  // make a copy of the this.board
-  Board next = board;
-  
-  return false;
-  //return (no_legal_moves(white) && !in_check(white));
+// in_mate is basically stalemate but king is currently in_check()
+bool Chess::in_mate(bool white) const {
+  return (in_check(white) && in_stalemate(white)); 
 }
 
 

@@ -43,30 +43,81 @@ bool Chess::itw(pair<char, char> start, pair<char, char> end) const {
   return false; // return false if no pieces in the way
 }
 
-bool Chess::no_legal_moves(bool white){
+bool Chess::itw1(std::pair<char, char> start, std::pair<char, char> end, std::pair<char, char> was, std::pair<char, char> is) const {
+   int cFile = end.first - start.first;
+  int cRank = end.second - start.second;
+  int addF;
+  int addR;
+  
+  if((abs(cFile) != abs(cRank)) && cFile != 0 && cRank != 0){
+    return false;
+  }
+  
+  //if knight, just return false
+  //if(tolower(board(start)->to_ascii()) == 'n') return false; 
+  //maybe add other checks, if mystery piece is also a jumper? if time permits
+  if (cFile < 0)
+    addF = -1;
+  else if(cFile ==0)
+    addF = 0;
+  else
+    addF = 1;
+  
+  if (cRank < 0)
+    addR = -1;
+  else if(cRank ==0)
+    addR = 0;
+  else
+    addR = 1;
+  
+  pair<char, char> steps = make_pair(start.first + addF, start.second + addR);
+  while(!(steps.first == end.first && steps.second == end.second)) {
+    if(steps == was){
+
+    }
+    else if(steps == is){
+      return true;
+    }
+    else if(board(steps) != nullptr){
+      return true;
+    }
+    steps = make_pair(steps.first + addF, steps.second + addR);
+    
+  }
+  
+  return false; // return false if no pieces in the way
+}
+
+
+bool Chess::no_legal_moves(bool white) const{
   //Iterate through all peieces with every possible move
   pair<char,char> startm;
   pair<char,char> endm;
   
-  for (char i = 'A'; i <='H'; i++){
-    for (char j = '1'; j <='8'; j++) {
-      startm =  make_pair(i,j);
+  for (char q = 'A'; q <='H'; q++){
+    for (char z = '1'; z <='8'; z++) {
+      startm =  make_pair(q,z);
+      //std::cout << q << " " << z << std::endl;
+      //std::cout <<"HERE"<<std::endl;
       if(board(startm)){//Finds is a piece exists
-				if((white && board(startm)->is_white()) || !(white || board(startm)->is_white())){ // Check if it a piece that is the turns color
-	  			for (char a = 'A'; i <='H'; i++){
-	    			for (char b = '1'; j <='8'; j++) {
-	      			endm = make_pair(a,b);
+	if((white && board(startm)->is_white()) || !(white || board(startm)->is_white())){ // Check if it a piece that is the turns color
+	  for (char a = 'A'; a <='H'; a++){
+	    for (char b = '1'; b <='8'; b++) {
+	      endm = make_pair(a,b);
 	      // TODO compiler error here: check_move() is not const
-	      			if (check_move(startm , endm)){//checks every possible move for a legal move
+	      if (check_move(startm , endm, white)){//checks every possible move for a legal move
+		//std::cout << q << " " << z << std::endl;
+		//std::cout << a << " " << b << std::endl << std::endl;;
+		
 		return false;// if a legal move is found the player is NOT in mate
-	      			}
-	    			}
-	  			}	
-				}
+	      }
+	    }
+	  }	
+	}
       }
     }
   }
-	return true;// if not legal moves are found they are in a mate
+  return true;// if not legal moves are found they are in a mate
 }
 
 /////////////////////////////////////
@@ -205,7 +256,7 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
 
 //like make_move, but only used for checking mates
 //avoid error messages
-bool Chess::check_move(std::pair<char, char> start, std::pair<char, char> end) {
+bool Chess::check_move(std::pair<char, char> start, std::pair<char, char> end, bool white) const {
   // check if start is a piece
   const Piece* piece = board(start);
     bool othph = false;
@@ -223,15 +274,15 @@ bool Chess::check_move(std::pair<char, char> start, std::pair<char, char> end) {
     //Check if Piece at end is of the same color
     if (board(end) != nullptr){
       if (piece->is_white() == board(end)->is_white())
-				return false;
+	return false;
       else
-				othph = true;
+	othph = true;
     }
     
     bool pawnall = true;
     if (tolower(piece->to_ascii()) == 'p'){
       if(othph){
-				pawnall = false;
+	pawnall = false;
       }
     }
     
@@ -239,49 +290,75 @@ bool Chess::check_move(std::pair<char, char> start, std::pair<char, char> end) {
     if(piece->legal_move_shape(start, end) && pawnall){
       // if not knight, check if there are no pieces in between
       if(tolower(piece->to_ascii()) != 'n'){
-				if (itw(start, end)) {
-	  			return false; // if piece is in the way, return false
-				}
+	if (itw(start, end)) {
+	  return false; // if piece is in the way, return false
+	}
       }
     }
     else if(tolower(piece->to_ascii()) == 'p' && !pawnall){
       if(!(piece->legal_capture_shape(start,end))){
-	  		return false;
+	return false;
       }
     }
     else {
       return false;
     }
+    //std::cout<< "here" << std::endl;
+    if(in_check1(white, start, end)){
+      return false;
+    }
+    else{
+      return true;
+    }
     // make the move
-    Board board_old = board; // make a copy of old board in case we need to undo the move, make sure it has a copy constructor
-    board.move_piece(start, end);
     
-    // Check for if this move puts the player in check
-    if(in_check(turn_white())){
-      board = board_old; // revert to old board
-        return false;
-    }
-    
-    if(tolower(piece->to_ascii()) == 'p') {
-      if(piece->is_white() && end.second == '8'){
-				board.remove_piece(end);
-				board.add_piece(end,'Q');
-      }
-      if(!piece->is_white() && end.second == '1'){
-				board.remove_piece(end);
-				board.add_piece(end,'q');
-      }
-    }
-    
-    // update location of king
-    if(piece->to_ascii() == 'K')
-        white_king = end;
-    else if (piece->to_ascii() == 'k')
-        black_king = end;
-
-    is_white_turn = !is_white_turn;
-    return true;
 }
+
+bool Chess::in_check1(bool white,std::pair<char, char> was, std::pair<char, char> is) const {
+  // check if the king is threatened in the current board state
+  
+  // get location of the player's king
+  pair<char, char> king;  
+  if (white)
+    king = white_king;
+  else
+    king = black_king;
+  //cout << "location of king: " << king.first << king.second << endl; 
+  // looping through the entire board to chech each piece
+  for (char i = 'A'; i <= 'H'; i++) {
+    for (char j = '1'; j <= '8'; j++) {
+      pair<char, char> piece = make_pair(i, j);
+      //cout << "checking pair: " << piece.first << piece.second << endl; 
+      if (board(piece) == nullptr) {
+	//cout << "nothing at " << piece.first << piece.second << endl;
+	continue; // pass if piece doesn't exist
+      }
+      
+      if (board(piece)->is_white() == white || !board(piece)->is_white() == !white) {
+	//cout << "piece at " << piece.first << piece.second << " is the same color" << endl;
+	continue; // pass if piece is same color as the king
+      }
+      
+      // only knight's can jump over other pieces so no need to check for in the way pieces
+      if (tolower(board(piece)->to_ascii() == 'k') &&  board(piece)->legal_capture_shape(piece, king)) {
+	//cout << "put in check by: " << piece.first << piece.second << endl;
+	return true;
+      }
+      
+      // for all other pieces
+      if(board(piece)->legal_capture_shape(piece, king) && !itw1(piece, king, was, is)) {
+	//cout << "put in check by: " << piece.first << piece.second << endl;
+	return true; 
+      }
+      
+      //cout << "piece: " << board(piece)->to_ascii() << " does not threaten king" << endl;
+    }
+  }
+  return false;
+}
+
+
+
 
 bool Chess::in_check(bool white) const {
   // check if the king is threatened in the current board state
@@ -331,17 +408,17 @@ bool Chess::in_check(bool white) const {
 // NOTE: if we want in_mate to be a const function we can't call check_move() inside it.
 // Need to fix implementation. 
 bool Chess::in_mate(bool white) const { 
-  Board nex = board;
-  return false;
-  //return(no_legal_moves(white) && in_check(white));
+  // Board nex = board;
+  //return false;
+  return(no_legal_moves(white) && in_check(white));
 }
 
 
 bool Chess::in_stalemate(bool white) const {
   //
-  Board nex = board;
-  return false;
-  //return (no_legal_moves(white) && !in_check(white));
+  //Board nex = board;
+  //return false;
+  return (no_legal_moves(white) && !in_check(white));
 }
 
 /////////////////////////////////////

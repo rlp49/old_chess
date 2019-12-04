@@ -385,13 +385,15 @@ std::istream& operator>> (std::istream& is, Chess& chess) {
 		for(int col = 0; j < 8; j++) {
 			is.get(c);
 			coord = make_pair('A' + j, '1' + i);
-			if(c == '-')
-				board.add_piece(
+			if(c != '-') {
+				board.add_piece(coord, c);
+			}
 		}
 	}
-	while(is.get(c)) {
-		
-	}
-	chess.board.;
+	is.get(c);
+	if(c == 'w') 
+		is_white_turn = true;
+	else
+		is_white_turn = false;
 	return is;
 }

@@ -16,26 +16,14 @@ Board::Board(){}
 
 Board::~Board() {
   for(std::map<std::pair<char, char>, Piece*>::iterator it=occ.begin(); it!=occ.end(); ++it) {
-    //if(*this(make_pair(it->first.first, it->first.second))!=nullptr) {
-    //std::cout << it->second->to_ascii() << std::endl;
-    //delete it->second;
-    //std::cout << "removed piece" << it->second->to_ascii() << " at" << it->first.first << it->first.second << std::endl;
-	delete it->second;
-      }
-  //}
+    delete it->second; 
+  }
 }
-
-// board copy constructor
-/*Board::Board(const Board& old) {
-    occ = old.occ;
-    }*/
 
 void Board::free_piece(std::pair<char, char> pos) {
   if(occ[pos]!=nullptr) {
-    cout << "freed " << occ[pos]->to_ascii() << std:: endl;
     delete occ[pos];
-    //cout << "freed " << ;
-      }
+  }
 }
 
 bool Board::remove_piece(std::pair<char,char> pos) {
@@ -49,10 +37,10 @@ bool Board::remove_piece(std::pair<char,char> pos) {
 
 bool Board::move_piece(std::pair<char,char> start, std::pair<char,char> end) {
     // move piece and delete start
-  free_piece(end);
-    occ[end] = occ[start];
-    remove_piece(start);
-    return true;
+  free_piece(end); //deallocate piece at end if there is one there already
+  occ[end] = occ[start];
+  remove_piece(start);
+  return true;
 }
 //returns pointer to position if it exists on board
 //returns nullptr if nothing's at that position
@@ -118,8 +106,7 @@ Board& Board::operator=(const Board& old) {
   std::vector<std::pair<char, char>> coords;
   for(std::map<std::pair<char, char>, Piece*>::iterator it=occ.begin(); it!=occ.end(); ++it) {
     if(it->second!=nullptr) {
-      delete occ[it->first];
-      //occ.erase(it->first);
+      delete occ[it->first]; //free all pieces in board
       coords.push_back(it->first);
     }
   }
@@ -128,7 +115,7 @@ Board& Board::operator=(const Board& old) {
   }
   for(std::map<std::pair<char, char>, Piece*>::const_iterator it=old.occ.cbegin(); it!=old.occ.cend(); ++it) {
     if(it->second!=nullptr) {
-      p = create_piece(it->second->to_ascii());
+      p = create_piece(it->second->to_ascii()); //allocate memory for new pieces
       occ[it->first]=p;
     }
   }

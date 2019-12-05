@@ -26,12 +26,6 @@ public:
   
   //Board destructor 
   ~Board();
-    /*for(std::map<std::pair<char, char>, Piece*>::iterator it=occ.begin(); it!=occ.end(); ++it) {
-      if(*this()
-      delete it->second;
-      std::cout << "removed piece at" << it->first.first << it->first.second << std::endl;
-      }*/
-  
 
   // Copy constructor
   Board(const Board& old);

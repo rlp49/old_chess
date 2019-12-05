@@ -149,7 +149,7 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
 				othph = true;
     }
     
-		// pawnall true if capture possible, but move not possible
+		// pawnall false if capture possible, but move not possible
     bool pawnall = true;
     if (tolower(piece->to_ascii()) == 'p') {
       if(othph)
@@ -411,8 +411,6 @@ std::istream& operator>> (std::istream& is, Chess& chess) {
       if(c=='p'||c=='P'||c=='k'||c=='K'||c=='n'||c=='N'||c=='q'||c=='Q'||c=='r'||c=='R'||c=='b'||c=='B'||c=='M'||c=='m') {
         chess.board.add_piece(coord, c);
       }
-      //if(chess.board(coord)!=nullptr) {
-	//std::cout << chess.board(coord)->to_ascii(); }
 	}
     is.get(c);
   }

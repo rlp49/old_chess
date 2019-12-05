@@ -5,7 +5,25 @@ TEAM
 	Matthew Landry, mlandry3
 
 DESIGN
-	//TODO
+Required functions:
+make_move()
+in_check()
+in_mate()
+stalemate()
+operator >>
+has_valid_kings()
+
+Helper functions:
+itw()
+remove_piece()
+free_piece()
+move_piece()
+add_piece()
+overloaded itw(), make_move(), in_check()
+
+Rule of 3 functions for board (non-trivial destructor, assignment operator, copy constructor).
+
+Not sure if we need to talk about the legal moves of pieces.
 
 COMPLETENESS
 	very complete, not aware of any missing/incorrect functionality

@@ -16,9 +16,10 @@ Board::Board(){}
 Board::~Board() {
   for(std::map<std::pair<char, char>, Piece*>::iterator it=occ.begin(); it!=occ.end(); ++it) {
     //if(*this(make_pair(it->first.first, it->first.second))!=nullptr) {
-    std::cout << it->second->to_ascii() << std::endl;
+    //std::cout << it->second->to_ascii() << std::endl;
+    //delete it->second;
+    //std::cout << "removed piece" << it->second->to_ascii() << " at" << it->first.first << it->first.second << std::endl;
 	delete it->second;
-	std::cout << "removed piece" << " at" << it->first.first << it->first.second << std::endl;
       }
   //}
 }
@@ -28,8 +29,16 @@ Board::~Board() {
     occ = old.occ;
     }*/
 
+void Board::free_piece(std::pair<char, char> pos) {
+  if(occ[pos]!=nullptr) {
+    delete occ[pos];
+    cout << "freed";
+      }
+}
+
 bool Board::remove_piece(std::pair<char,char> pos) {
   if (occ[pos] != nullptr) { // check if there actually is a piece there before deleting it
+    occ[pos]=nullptr;
     occ.erase(pos);
     return true;
   }
@@ -38,9 +47,7 @@ bool Board::remove_piece(std::pair<char,char> pos) {
 
 bool Board::move_piece(std::pair<char,char> start, std::pair<char,char> end) {
     // move piece and delete start
-  if(occ[end] != nullptr) {
-    delete occ[end];
-  }
+  free_piece(end);
     occ[end] = occ[start];
     remove_piece(start);
     return true;
@@ -96,8 +103,10 @@ void Board::display() const {
 Board::Board(const Board& old) {
   Piece * p=nullptr;
   for(std::map<std::pair<char, char>, Piece*>::const_iterator it=old.occ.begin(); it!=old.occ.end(); ++it) {
+    if(it->second!=nullptr) {
     p = create_piece(it->second->to_ascii());
     occ[it->first]= p;
+    }
   }
   //return *this;
   }

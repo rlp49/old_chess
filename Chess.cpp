@@ -343,8 +343,8 @@ bool Chess::in_check(bool white, Board& board) const {
 }
 
 // checks for legal moves for all pieces, returns true if no legal moves found
-/*bool Chess::in_stalemate(bool white) const {
-   
+bool Chess::in_stalemate(bool white) const {
+  /*   
   Board board = this->board;
   vector<pair<char,char>> pieces; // vector storing pieces to check moves with
   
@@ -374,8 +374,8 @@ bool Chess::in_check(bool white, Board& board) const {
       }
     }
     }
-  return false;
-  }*/
+  */return false;  //put back to true
+  }
 
 // in_mate is basically stalemate but king is currently in_check()
 bool Chess::in_mate(bool white) const {
@@ -397,10 +397,10 @@ std::istream& operator>> (std::istream& is, Chess& chess) {
   for(char i = 'A'; i <= 'H'; i++) {
     for(char j = '1'; j <= '8'; j++) {
       coord = make_pair(i, j);
+      chess.board.free_piece(coord);
       chess.board.remove_piece(coord);
     }
   }
-  
   char c;
   for(char k = '8'; k >= '1'; k--) {
     for(char l = 'A'; l <= 'H'; l++) {
@@ -409,6 +409,8 @@ std::istream& operator>> (std::istream& is, Chess& chess) {
       if(c=='p'||c=='P'||c=='k'||c=='K'||c=='n'||c=='N'||c=='q'||c=='Q'||c=='r'||c=='R'||c=='b'||c=='B'||c=='M'||c=='m') {
         chess.board.add_piece(coord, c);
       }
+      if(chess.board(coord)!=nullptr) {
+	  std::cout << chess.board(coord)->to_ascii(); }
     }
     is.get(c);
   }

@@ -73,17 +73,20 @@ bool Board::add_piece(std::pair<char, char> position, char piece_designator) {
 //instructions only say to check if there are two kings,
 //not necessarily of different colors, so...
 bool Board::has_valid_kings() const { 
-	int count = 0;
 	std::stringstream ss;
 	ss << *this; //basically get_board()
 	char c;
+	int white_king = 0;
+	int black_king = 0;
 	while(ss >> c) {
-		if(c == 'K' || c == 'k')
-			count++;
+		if(c == 'K')
+			white_king++;
+		else if(c == 'k')
+			black_king++;
 	}
-	if(count == 2)
+	if(white_king == 1 && black_king == 1)
 		return true;
-	return false;
+	else return false;
 }
 
 void Board::display() const {

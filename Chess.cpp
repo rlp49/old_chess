@@ -165,9 +165,10 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
 			}
     }
     else if(tolower(piece->to_ascii()) == 'p' && !pawnall) {
-      if((!(piece->legal_capture_shape(start,end)))) 	
+      if((!(piece->legal_capture_shape(start,end)))) { 	
 				cout << "Invalid Move" << endl;
 	  	return false;
+      }
     }
     else {
       cout << "Invalid Move" << endl;
@@ -175,7 +176,7 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
     }
 	
     // make the move
-    Board board_old = board; // make a copy of old board in case we need to undo the move, make sure it has a copy constructor
+    Board board_old = board; // make a copy of old board in case we need to undo the move, make sure it has a copy constructorre
     board.move_piece(start, end);
     
     // Check for if this move puts the player in check
@@ -342,7 +343,8 @@ bool Chess::in_check(bool white, Board& board) const {
 }
 
 // checks for legal moves for all pieces, returns true if no legal moves found
-bool Chess::in_stalemate(bool white) const { 
+/*bool Chess::in_stalemate(bool white) const {
+   
   Board board = this->board;
   vector<pair<char,char>> pieces; // vector storing pieces to check moves with
   
@@ -371,9 +373,9 @@ bool Chess::in_stalemate(bool white) const {
         board = old; // need assignment operator
       }
     }
-  }
-  return true;
-}
+    }
+  return false;
+  }*/
 
 // in_mate is basically stalemate but king is currently in_check()
 bool Chess::in_mate(bool white) const {

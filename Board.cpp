@@ -13,10 +13,20 @@ using std::cout;
 /////////////////////////////////////
 Board::Board(){}
 
-// board copy constructor
-Board::Board(const Board& old) {
-    occ = old.occ;
+Board::~Board() {
+  for(std::map<std::pair<char, char>, Piece*>::iterator it=occ.begin(); it!=occ.end(); ++it) {
+    //if(*this(make_pair(it->first.first, it->first.second))!=nullptr) {
+    std::cout << it->second->to_ascii() << std::endl;
+	delete it->second;
+	std::cout << "removed piece" << " at" << it->first.first << it->first.second << std::endl;
+      }
+  //}
 }
+
+// board copy constructor
+/*Board::Board(const Board& old) {
+    occ = old.occ;
+    }*/
 
 bool Board::remove_piece(std::pair<char,char> pos) {
   if (occ[pos] != nullptr) { // check if there actually is a piece there before deleting it
@@ -28,6 +38,9 @@ bool Board::remove_piece(std::pair<char,char> pos) {
 
 bool Board::move_piece(std::pair<char,char> start, std::pair<char,char> end) {
     // move piece and delete start
+  if(occ[end] != nullptr) {
+    delete occ[end];
+  }
     occ[end] = occ[start];
     remove_piece(start);
     return true;
@@ -78,6 +91,20 @@ bool Board::has_valid_kings() const {
 
 void Board::display() const {
 	cout << *this;
+}
+
+Board::Board(const Board& old) {
+  Piece * p=nullptr;
+  for(std::map<std::pair<char, char>, Piece*>::const_iterator it=old.occ.begin(); it!=old.occ.end(); ++it) {
+    p = create_piece(it->second->to_ascii());
+    occ[it->first]= p;
+  }
+  //return *this;
+  }
+
+Board& Board::operator=(const Board& old) {
+  occ=old.occ;
+  return *this;
 }
 
 /////////////////////////////////////

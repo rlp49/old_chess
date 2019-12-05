@@ -32,8 +32,9 @@ Board::~Board() {
 
 void Board::free_piece(std::pair<char, char> pos) {
   if(occ[pos]!=nullptr) {
+    cout << "freed " << occ[pos]->to_ascii() << std:: endl;
     delete occ[pos];
-    cout << "freed";
+    //cout << "freed " << ;
       }
 }
 

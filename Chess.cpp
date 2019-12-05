@@ -189,10 +189,12 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
   	// pawn promotion
     if(tolower(piece->to_ascii()) == 'p') {
       if(piece->is_white() && end.second == '8') {
+	board.free_piece(end);
 				board.remove_piece(end);
 				board.add_piece(end,'Q');
       }
       if(!piece->is_white() && end.second == '1') {
+	board.free_piece(end);
 				board.remove_piece(end);
 				board.add_piece(end,'q');
       }
@@ -345,7 +347,7 @@ bool Chess::in_check(bool white, Board& board) const {
 // checks for legal moves for all pieces, returns true if no legal moves found
 bool Chess::in_stalemate(bool white) const {
      
-  /*Board board = this->board;
+  Board board = this->board;
   vector<pair<char,char>> pieces; // vector storing pieces to check moves with
   
   // first for loop gets a vector of pieces
@@ -373,8 +375,8 @@ bool Chess::in_stalemate(bool white) const {
         board = old; // need assignment operator
       }
     }
-    }*/
-  return false; //put back to true  
+    }
+  return true;   
   }
 
 // in_mate is basically stalemate but king is currently in_check()

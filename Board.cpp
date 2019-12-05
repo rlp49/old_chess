@@ -2,6 +2,7 @@
 #include <utility>
 #include <map>
 #include <sstream>
+#include <vector>
 #include "Board.h"
 #include "CreatePiece.h"
 
@@ -102,7 +103,7 @@ void Board::display() const {
 
 Board::Board(const Board& old) {
   Piece * p=nullptr;
-  for(std::map<std::pair<char, char>, Piece*>::const_iterator it=old.occ.begin(); it!=old.occ.end(); ++it) {
+  for(std::map<std::pair<char, char>, Piece*>::const_iterator it=old.occ.cbegin(); it!=old.occ.cend(); ++it) {
     if(it->second!=nullptr) {
     p = create_piece(it->second->to_ascii());
     occ[it->first]= p;
@@ -112,8 +113,26 @@ Board::Board(const Board& old) {
   }
 
 Board& Board::operator=(const Board& old) {
-  occ=old.occ;
+  Piece * p = nullptr;
+  std::vector<std::pair<char, char>> coords;
+  for(std::map<std::pair<char, char>, Piece*>::iterator it=occ.begin(); it!=occ.end(); ++it) {
+    if(it->second!=nullptr) {
+      delete occ[it->first];
+      //occ.erase(it->first);
+      coords.push_back(it->first);
+    }
+  }
+  for(unsigned i = 0; i < coords.size(); i++) {
+    occ.erase(coords[i]);
+  }
+  for(std::map<std::pair<char, char>, Piece*>::const_iterator it=old.occ.cbegin(); it!=old.occ.cend(); ++it) {
+    if(it->second!=nullptr) {
+      p = create_piece(it->second->to_ascii());
+      occ[it->first]=p;
+    }
+  }
   return *this;
+    
 }
 
 /////////////////////////////////////

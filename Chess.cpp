@@ -193,7 +193,7 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
 				board.remove_piece(end);
 				board.add_piece(end,'Q');
       }
-      if(!piece->is_white() && end.second == '1') {
+      else if(!piece->is_white() && end.second == '1') {
 	board.free_piece(end);
 				board.remove_piece(end);
 				board.add_piece(end,'q');
@@ -263,7 +263,7 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end, Bo
 			board.remove_piece(end);
 			board.add_piece(end,'Q');
     }
-    if(!piece->is_white() && end.second == '1') {
+    else if(!piece->is_white() && end.second == '1') {
 			board.remove_piece(end);
 			board.add_piece(end,'q');     
 		}

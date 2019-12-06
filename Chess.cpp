@@ -302,7 +302,6 @@ bool Chess::in_check(bool white) const {
         continue; // pass if piece is same color as the king
       // checks if king in check
       if(board(piece)->legal_capture_shape(piece, king) && !itw(piece, king)) {
-        cout << "put in check by: " << piece.first << piece.second << endl;
         return true; 
   		}
     }

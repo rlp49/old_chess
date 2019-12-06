@@ -15,7 +15,7 @@ bool Chess::itw(pair<char, char> start, pair<char, char> end, Board& board) cons
   int addF;
   int addR;
   
-	//jumping piece, ignore itw
+  //jumping piece, ignore itw
   if((abs(cFile) != abs(cRank)) && cFile != 0 && cRank != 0){
     return false;
   }
@@ -34,7 +34,7 @@ bool Chess::itw(pair<char, char> start, pair<char, char> end, Board& board) cons
   else
     addR = 1;
   
-	//checks if there's a piece in each pos b/w start and end
+  //checks if there's a piece in each pos b/w start and end
   pair<char, char> steps = make_pair(start.first + addF, start.second + addR);
   while(!(steps.first == end.first && steps.second == end.second)) {
     if(board(steps) != nullptr) return true;
@@ -52,7 +52,7 @@ bool Chess::itw(pair<char, char> start, pair<char, char> end) const {
   int addF;
   int addR;
   
-	// if piece jumps, return false
+  // if piece jumps, return false
   if((abs(cFile) != abs(cRank)) && cFile != 0 && cRank != 0){
     return false;
   }
@@ -71,7 +71,7 @@ bool Chess::itw(pair<char, char> start, pair<char, char> end) const {
   else
     addR = 1;
   
-	//checks each square between start and end for pieces in the way
+  //checks each square between start and end for pieces in the way
   pair<char, char> steps = make_pair(start.first + addF, start.second + addR);
   while(!(steps.first == end.first && steps.second == end.second)) {
     if(board(steps) != nullptr) return true;
@@ -85,35 +85,35 @@ bool Chess::itw(pair<char, char> start, pair<char, char> end) const {
 // DO NOT MODIFY THIS FUNCTION!!!! //
 /////////////////////////////////////
 Chess::Chess() : is_white_turn(true) {
-	// Add the pawns
-	for (int i = 0; i < 8; i++) {
-		board.add_piece(std::pair<char, char>('A' + i, '1' + 1), 'P');
-		board.add_piece(std::pair<char, char>('A' + i, '1' + 6), 'p');
-	}
+  // Add the pawns
+  for (int i = 0; i < 8; i++) {
+    board.add_piece(std::pair<char, char>('A' + i, '1' + 1), 'P');
+    board.add_piece(std::pair<char, char>('A' + i, '1' + 6), 'p');
+  }
 
-	// Add the rooks
-	board.add_piece(std::pair<char, char>( 'A'+0 , '1'+0 ) , 'R' );
-	board.add_piece(std::pair<char, char>( 'A'+7 , '1'+0 ) , 'R' );
-	board.add_piece(std::pair<char, char>( 'A'+0 , '1'+7 ) , 'r' );
-	board.add_piece(std::pair<char, char>( 'A'+7 , '1'+7 ) , 'r' );
+  // Add the rooks
+  board.add_piece(std::pair<char, char>( 'A'+0 , '1'+0 ) , 'R' );
+  board.add_piece(std::pair<char, char>( 'A'+7 , '1'+0 ) , 'R' );
+  board.add_piece(std::pair<char, char>( 'A'+0 , '1'+7 ) , 'r' );
+  board.add_piece(std::pair<char, char>( 'A'+7 , '1'+7 ) , 'r' );
 
-	// Add the knights
-	board.add_piece(std::pair<char, char>( 'A'+1 , '1'+0 ) , 'N' );
-	board.add_piece(std::pair<char, char>( 'A'+6 , '1'+0 ) , 'N' );
-	board.add_piece(std::pair<char, char>( 'A'+1 , '1'+7 ) , 'n' );
-	board.add_piece(std::pair<char, char>( 'A'+6 , '1'+7 ) , 'n' );
+  // Add the knights
+  board.add_piece(std::pair<char, char>( 'A'+1 , '1'+0 ) , 'N' );
+  board.add_piece(std::pair<char, char>( 'A'+6 , '1'+0 ) , 'N' );
+  board.add_piece(std::pair<char, char>( 'A'+1 , '1'+7 ) , 'n' );
+  board.add_piece(std::pair<char, char>( 'A'+6 , '1'+7 ) , 'n' );
 
-	// Add the bishops
-	board.add_piece(std::pair<char, char>( 'A'+2 , '1'+0 ) , 'B' );
-	board.add_piece(std::pair<char, char>( 'A'+5 , '1'+0 ) , 'B' );
-	board.add_piece(std::pair<char, char>( 'A'+2 , '1'+7 ) , 'b' );
-	board.add_piece(std::pair<char, char>( 'A'+5 , '1'+7 ) , 'b' );
+  // Add the bishops
+  board.add_piece(std::pair<char, char>( 'A'+2 , '1'+0 ) , 'B' );
+  board.add_piece(std::pair<char, char>( 'A'+5 , '1'+0 ) , 'B' );
+  board.add_piece(std::pair<char, char>( 'A'+2 , '1'+7 ) , 'b' );
+  board.add_piece(std::pair<char, char>( 'A'+5 , '1'+7 ) , 'b' );
 
-	// Add the kings and queens
-	board.add_piece(std::pair<char, char>( 'A'+3 , '1'+0 ) , 'Q' );
-	board.add_piece(std::pair<char, char>( 'A'+4 , '1'+0 ) , 'K' );
-	board.add_piece(std::pair<char, char>( 'A'+3 , '1'+7 ) , 'q' );
-	board.add_piece(std::pair<char, char>( 'A'+4 , '1'+7 ) , 'k' );
+  // Add the kings and queens
+  board.add_piece(std::pair<char, char>( 'A'+3 , '1'+0 ) , 'Q' );
+  board.add_piece(std::pair<char, char>( 'A'+4 , '1'+0 ) , 'K' );
+  board.add_piece(std::pair<char, char>( 'A'+3 , '1'+7 ) , 'q' );
+  board.add_piece(std::pair<char, char>( 'A'+4 , '1'+7 ) , 'k' );
 
 }
 
@@ -128,52 +128,52 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
     
     // Check if the piece is the current player's piece 
     if (piece->is_white() != turn_white()) {
-			cout << "Not your piece" << endl;
+      cout << "Not your piece" << endl;
       return false;
     }
     
     // check if end is in bounds of board
     if (!(end.first >= 'A' && end.first <= 'H' && end.second >= '1' && end.second <= '8')) {
-			cout << "end pos is out of bounds" << endl;
+      cout << "end pos is out of bounds" << endl;
         return false;
     }
     
     //Check if move results in capture 
     if (board(end) != nullptr) {
       if (piece->is_white() == board(end)->is_white()) {
-				cout << "Your piece occupies that square" << endl;
-				return false;
+        cout << "Your piece occupies that square" << endl;
+        return false;
       }
       else
-				capture_piece = true; // set capture_piece = true if exists piece at end pos that is not same color
+        capture_piece = true; // set capture_piece = true if exists piece at end pos that is not same color
     }
     
-		// pawn_capture tells us if we need to call legal_capture instead of legal_move 
+    // pawn_capture tells us if we need to call legal_capture instead of legal_move 
     bool pawn_capture = false;
     if (tolower(piece->to_ascii()) == 'p') {
       if(capture_piece)
-				pawn_capture = true;
+        pawn_capture = true;
     }
     
     // call valid_move for the piece
     if(piece->legal_move_shape(start, end) && !pawn_capture) {
       // Check if there are no pieces in between
-			if(itw(start, end)) {
-	  		cout << "Piece in the way" << endl;
-	  		return false; // if piece is in the way, return false
-			}
+      if(itw(start, end)) {
+        cout << "Piece in the way" << endl;
+        return false; // if piece is in the way, return false
+      }
     }
     else if(tolower(piece->to_ascii()) == 'p' && pawn_capture) {
-      if((!(piece->legal_capture_shape(start,end)))) { 	
-				cout << "Invalid Move" << endl;
-	  	return false;
+      if((!(piece->legal_capture_shape(start,end)))) {  
+        cout << "Invalid Move" << endl;
+      return false;
       }
     }
     else {
       cout << "Invalid Move" << endl;
       return false;
     }
-	
+  
     // make the move
     Board board_old = board; // make a copy of old board in case we need to undo the move
     board.move_piece(start, end);
@@ -185,21 +185,21 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
       return false;
     }
  
-  	// pawn promotion
+    // pawn promotion
     if(tolower(piece->to_ascii()) == 'p') {
       if(piece->is_white() && end.second == '8') {
-	board.free_piece(end);
-				board.remove_piece(end);
-				board.add_piece(end,'Q');
+        board.free_piece(end);
+        board.remove_piece(end);
+        board.add_piece(end,'Q');
       }
       else if(!piece->is_white() && end.second == '1') {
-	board.free_piece(end);
-				board.remove_piece(end);
-				board.add_piece(end,'q');
+        board.free_piece(end);
+        board.remove_piece(end);
+        board.add_piece(end,'q');
       }
     }
     
-		//changes turn
+    //changes turn
     is_white_turn = !is_white_turn;
     return true;
 }
@@ -227,25 +227,25 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end, Bo
   //Check if Piece at end is of the same color
   if (board(end) != nullptr) {
     if (piece->is_white() == board(end)->is_white())
-		  return false;
+      return false;
     else 
-	  	capture_piece = true;
+      capture_piece = true;
   }
     
   bool pawn_capture = false;
   if (tolower(piece->to_ascii()) == 'p') {
     if(capture_piece)
-			pawn_capture = true;
+      pawn_capture = true;
   }
     
   // call valid_move for the piece
   if(piece->legal_move_shape(start, end) && !pawn_capture) {
-	  if(itw(start, end, board)) 
-	  	return false; // if piece is in the way, return false
+    if(itw(start, end, board)) 
+      return false; // if piece is in the way, return false
   }
   else if(tolower(piece->to_ascii()) == 'p' && pawn_capture) {
       if(!(piece->legal_capture_shape(start,end)))
-	  		return false;
+        return false;
   }
   else 
     return false;
@@ -260,13 +260,13 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end, Bo
   //pawn promotion
   if(tolower(piece->to_ascii()) == 'p') {
     if(piece->is_white() && end.second == '8') {
-			board.remove_piece(end);
-			board.add_piece(end,'Q');
+      board.remove_piece(end);
+      board.add_piece(end,'Q');
     }
     else if(!piece->is_white() && end.second == '1') {
-			board.remove_piece(end);
-			board.add_piece(end,'q');     
-		}
+      board.remove_piece(end);
+      board.add_piece(end,'q');     
+    }
   }
     
   return true;
@@ -274,7 +274,7 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end, Bo
 
 // calls legal_capture() on all of the opponent's pieces to see if they can capture the king
 bool Chess::in_check(bool white) const {
-	//finds location of the king
+  //finds location of the king
   pair<char, char> king;  
   for(char i = 'A'; i <= 'H'; i++) {
     for(char j = '1'; j <= '8'; j++) {
@@ -295,7 +295,7 @@ bool Chess::in_check(bool white) const {
   // looping through the entire board to check each piece
   for(char i = 'A'; i <= 'H'; i++) {
     for(char j = '1'; j <= '8'; j++) {
-	    pair<char, char> piece = make_pair(i, j);
+      pair<char, char> piece = make_pair(i, j);
       if(board(piece) == nullptr) 
         continue; // pass if piece doesn't exist
       if(board(piece)->is_white() == white || !board(piece)->is_white() == !white) 
@@ -303,7 +303,7 @@ bool Chess::in_check(bool white) const {
       // checks if king in check
       if(board(piece)->legal_capture_shape(piece, king) && !itw(piece, king)) {
         return true; 
-  		}
+      }
     }
   }
   return false;
@@ -332,7 +332,7 @@ bool Chess::in_check(bool white, Board& board) const {
   // see if any opponent pieces can capture king
   for(char i = 'A'; i <= 'H'; i++) {
     for(char j = '1'; j <= '8'; j++) {
-	    pair<char, char> piece = make_pair(i, j);
+      pair<char, char> piece = make_pair(i, j);
       if(board(piece) == nullptr) 
         continue; // pass if piece doesn't exist
       if(board(piece)->is_white() == white || !board(piece)->is_white() == !white)
@@ -388,9 +388,9 @@ bool Chess::in_mate(bool white) const {
 // DO NOT MODIFY THIS FUNCTION!!!! //
 /////////////////////////////////////
 std::ostream& operator<< (std::ostream& os, const Chess& chess) {
-	// Write the board out and then either the character 'w' or the character 'b',
-	// depending on whose turn it is
-	return os << chess.get_board() << (chess.turn_white() ? 'w' : 'b');
+  // Write the board out and then either the character 'w' or the character 'b',
+  // depending on whose turn it is
+  return os << chess.get_board() << (chess.turn_white() ? 'w' : 'b');
 }
 
 std::istream& operator>> (std::istream& is, Chess& chess) {
@@ -413,7 +413,7 @@ std::istream& operator>> (std::istream& is, Chess& chess) {
       if(c=='p'||c=='P'||c=='k'||c=='K'||c=='n'||c=='N'||c=='q'||c=='Q'||c=='r'||c=='R'||c=='b'||c=='B'||c=='M'||c=='m') {
         chess.board.add_piece(coord, c);
       }
-	}
+  }
     is.get(c);
   }
   is.get(c);

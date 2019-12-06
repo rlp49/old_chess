@@ -16,9 +16,9 @@
 class Board {
 
         // Throughout, we will be accessing board positions using an std::pair<char, char>.
-	// The assumption is that the first value is the column with values in
+  // The assumption is that the first value is the column with values in
         // {'A','B','C','D','E','F','G','H'} (all caps)
-	// and the second is the row, with values in {'1','2','3','4','5','6','7','8'}
+  // and the second is the row, with values in {'1','2','3','4','5','6','7','8'}
   
 public:
   // Default constructor
@@ -58,16 +58,17 @@ public:
   // Returns true if the board has the right number of kings on it
   bool has_valid_kings() const;
 
-    bool check_move(std::pair<char, char> start, std::pair<char, char> end);
+  bool check_move(std::pair<char, char> start, std::pair<char, char> end);
 
-    bool make_move(std::pair<char, char> start, std::pair<char, char> end);
+  bool make_move(std::pair<char, char> start, std::pair<char, char> end);
 
-    bool in_check(bool white);
+  bool in_check(bool white);
     
-    bool itw(std::pair<char, char> start, std::pair<char, char> end);
+  bool itw(std::pair<char, char> start, std::pair<char, char> end);
+
 private:
-	// The sparse map storing the pieces, keyed off locations
-	std::map<std::pair<char, char>, Piece*> occ;
+  // The sparse map storing the pieces, keyed off locations
+  std::map<std::pair<char, char>, Piece*> occ;
 };
 
 // Write the board state to an output stream

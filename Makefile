@@ -14,7 +14,7 @@ main.o: main.cpp Chess.h Board.h CreatePiece.h
 Chess.o: Chess.cpp Chess.h 
 	$(CC) $(CFLAGS) -c Chess.cpp -g
 
-Board.o: Board.cpp Board.h CreatePiece.h
+Board.o: Board.cpp Board.h CreatePiece.h Terminal.h
 	$(CC) $(CFLAGS) -c Board.cpp -g
 
 CreatePiece.o: CreatePiece.cpp CreatePiece.h Pawn.h Rook.h Knight.h Bishop.h Queen.h King.h Mystery.h

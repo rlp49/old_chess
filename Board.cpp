@@ -5,6 +5,7 @@
 #include <vector>
 #include "Board.h"
 #include "CreatePiece.h"
+#include "Terminal.h"
 
 using std::make_pair;
 using std::cout;
@@ -91,7 +92,26 @@ bool Board::has_valid_kings() const {
 }
 
 void Board::display() const {
-	cout << *this;
+  // create a terminal object to change colors
+  Terminal terminal;
+
+  // in stringstream used as a buffer to hold contents of << board
+  std::stringstream in;
+  in << *this;
+  
+  std::string temp;
+  char count = '8';
+  while (in >> temp) {
+    terminal.color_fg(true, terminal.GREEN);
+    cout << count;
+    terminal.set_default();
+    cout << temp << std::endl;
+    count--;
+  }
+  terminal.color_fg(true, terminal.RED);
+  cout << "+ABCDEFGH"; 
+  terminal.set_default();
+  cout << std::endl;
 }
 
 // copy constructor

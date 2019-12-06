@@ -93,9 +93,7 @@ bool Board::has_valid_kings() const {
 
 void Board::display() const {
   cout << std::endl;
-  // create a terminal object to change colors
-  Terminal terminal;
-
+ 
   // in stringstream used as a buffer to hold contents of << board
   std::stringstream in;
   in << *this;
@@ -103,15 +101,15 @@ void Board::display() const {
   std::string temp;
   char count = '8';
   while (in >> temp) {
-    terminal.color_fg(true, terminal.GREEN);
+    Terminal::color_fg(true, Terminal::GREEN);
     cout << count;
-    terminal.set_default();
+    Terminal::set_default();
     cout << temp << std::endl;
     count--;
   }
-  terminal.color_fg(true, terminal.RED);
+  Terminal::color_fg(true, Terminal::RED);
   cout << "+ABCDEFGH"; 
-  terminal.set_default();
+  Terminal::set_default();
   cout << std::endl;
 }
 

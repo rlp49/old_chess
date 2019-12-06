@@ -14,18 +14,21 @@ using std::cout;
 /////////////////////////////////////
 Board::Board(){}
 
+// non trivial destructor to deallocate pieces in the map
 Board::~Board() {
   for(std::map<std::pair<char, char>, Piece*>::iterator it=occ.begin(); it!=occ.end(); ++it) {
     delete it->second; 
   }
 }
 
+// delete the actual piece object
 void Board::free_piece(std::pair<char, char> pos) {
   if(occ[pos]!=nullptr) {
     delete occ[pos];
   }
 }
 
+// remove piece key from map
 bool Board::remove_piece(std::pair<char,char> pos) {
   if (occ[pos] != nullptr) { // check if there actually is a piece there before deleting it
     occ[pos]=nullptr;
@@ -36,12 +39,12 @@ bool Board::remove_piece(std::pair<char,char> pos) {
 }
 
 bool Board::move_piece(std::pair<char,char> start, std::pair<char,char> end) {
-    // move piece and delete start
   free_piece(end); //deallocate piece at end if there is one there already
   occ[end] = occ[start];
   remove_piece(start);
   return true;
 }
+
 //returns pointer to position if it exists on board
 //returns nullptr if nothing's at that position
 const Piece* Board::operator()(std::pair<char, char> position) const {
@@ -70,8 +73,6 @@ bool Board::add_piece(std::pair<char, char> position, char piece_designator) {
 	return false;
 }
 
-//instructions only say to check if there are two kings,
-//not necessarily of different colors, so...
 bool Board::has_valid_kings() const { 
 	std::stringstream ss;
 	ss << *this; //basically get_board()
@@ -93,17 +94,18 @@ void Board::display() const {
 	cout << *this;
 }
 
+// copy constructor
 Board::Board(const Board& old) {
-  Piece * p=nullptr;
+  Piece * p = nullptr;
   for(std::map<std::pair<char, char>, Piece*>::const_iterator it=old.occ.cbegin(); it!=old.occ.cend(); ++it) {
     if(it->second!=nullptr) {
-    p = create_piece(it->second->to_ascii());
-    occ[it->first]= p;
+      p = create_piece(it->second->to_ascii());
+      occ[it->first]= p;
     }
   }
-  //return *this;
-  }
+}
 
+// assignment operator
 Board& Board::operator=(const Board& old) {
   Piece * p = nullptr;
   std::vector<std::pair<char, char>> coords;
@@ -123,7 +125,6 @@ Board& Board::operator=(const Board& old) {
     }
   }
   return *this;
-    
 }
 
 /////////////////////////////////////

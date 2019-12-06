@@ -6,24 +6,24 @@ TEAM
 
 DESIGN
 Required functions:
-make_move()
-in_check()
-in_mate()
-stalemate()
-operator >>
-has_valid_kings()
+make_move() : makes appropriate checks for illegal moves, before actually moving
+in_check() : checks if enemy pieces can capture your king, returns true if yes
+in_stalemate() : checks if there are no legal moves; returns yes if true
+in_mate() : checks if in check, and in stalemate; returns yes if true
+operator >> : loading in a saved board (.txt); uses stringstream to read in file
+has_valid_kings() : uses display to detect 'k' and 'K'
 
 Helper functions:
-itw()
-remove_piece()
-free_piece()
-move_piece()
-add_piece()
-overloaded itw(), make_move(), in_check()
+itw() : in the way, checks if there are pieces between start and end pos (if not jumper)
+remove_piece() : deletes piece from board/occ
+free_piece() : deallocates memory for piece's pointer
+add_piece() : calls create_piece, allocates memory to pointer
+move_piece() : calls remove_piece(), free_piece(), and add_piece()
+overloaded itw(), make_move(), in_check() 
+	-same thing as original, but used for checking checkmate/stalemate
+	-takes in a Board reference as additional parameter
 
-Rule of 3 functions for board (non-trivial destructor, assignment operator, copy constructor).
-
-Not sure if we need to talk about the legal moves of pieces.
+Applied rule of 3 functions for board (non-trivial destructor, assignment operator, copy constructor).
 
 COMPLETENESS
 	very complete, not aware of any missing/incorrect functionality

@@ -19,7 +19,7 @@ remove_piece() : deletes piece from board/occ
 free_piece() : deallocates memory for piece's pointer
 add_piece() : calls create_piece, allocates memory to pointer
 move_piece() : calls remove_piece(), free_piece(), and add_piece()
-overloaded itw(), make_move(), in_check() 
+overloaded make_move() and in_check() 
 	-same thing as original, but used for checking checkmate/stalemate
 	-takes in a Board reference as additional parameter
 

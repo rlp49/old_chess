@@ -41,8 +41,7 @@ public:
   bool in_stalemate(bool white) const;
     
   // helper function to check if piece is in the way
-  bool itw(std::pair<char, char> start, std::pair<char, char> end) const;
-  bool itw(std::pair<char,char> start, std::pair<char,char> end, Board& board) const; // overloaded
+  bool itw(std::pair<char,char> start, std::pair<char,char> end, const Board& board) const;
   
   friend std::istream& operator>> (std::istream& is, Chess& chess);
 

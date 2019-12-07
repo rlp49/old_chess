@@ -8,8 +8,9 @@ using std::cout; using std::endl;
 using std::pair; using std::make_pair;
 using std::vector;
 
-// overloaded itw()
-bool Chess::itw(pair<char, char> start, pair<char, char> end, Board& board) const {
+
+// added function itw() to check for in the way pieces
+bool Chess::itw(pair<char, char> start, pair<char, char> end, const Board& board) const {
   int cFile = end.first - start.first; //how many files ahead the end pos is
   int cRank = end.second - start.second; //how many ranks ahead the end pos is
   int addF;
@@ -40,42 +41,6 @@ bool Chess::itw(pair<char, char> start, pair<char, char> end, Board& board) cons
     if(board(steps) != nullptr) return true;
     steps = make_pair(steps.first + addF, steps.second + addR);
     
-  }
-  
-  return false; // return false if no pieces in the way
-}
-
-// added function itw() to check for in the way pieces
-bool Chess::itw(pair<char, char> start, pair<char, char> end) const {
-  int cFile = end.first - start.first; //how many files ahead the end pos is
-  int cRank = end.second - start.second; //how many ranks ahead the end pos is
-  int addF;
-  int addR;
-  
-  // if piece jumps, return false
-  if((abs(cFile) != abs(cRank)) && cFile != 0 && cRank != 0){
-    return false;
-  }
-  
-  if (cFile < 0)
-    addF = -1;
-  else if(cFile ==0)
-    addF = 0;
-  else
-    addF = 1;
-  
-  if (cRank < 0)
-    addR = -1;
-  else if(cRank ==0)
-    addR = 0;
-  else
-    addR = 1;
-  
-  //checks each square between start and end for pieces in the way
-  pair<char, char> steps = make_pair(start.first + addF, start.second + addR);
-  while(!(steps.first == end.first && steps.second == end.second)) {
-    if(board(steps) != nullptr) return true;
-    steps = make_pair(steps.first + addF, steps.second + addR);
   }
   
   return false; // return false if no pieces in the way
@@ -158,7 +123,7 @@ bool Chess::make_move(std::pair<char, char> start, std::pair<char, char> end) {
     // call valid_move for the piece
     if(piece->legal_move_shape(start, end) && !pawn_capture) {
       // Check if there are no pieces in between
-      if(itw(start, end)) {
+      if(itw(start, end, board)) {
         cout << "Piece in the way" << endl;
         return false; // if piece is in the way, return false
       }
@@ -301,7 +266,7 @@ bool Chess::in_check(bool white) const {
       if(board(piece)->is_white() == white || !board(piece)->is_white() == !white) 
         continue; // pass if piece is same color as the king
       // checks if king in check
-      if(board(piece)->legal_capture_shape(piece, king) && !itw(piece, king)) {
+      if(board(piece)->legal_capture_shape(piece, king) && !itw(piece, king, board)) {
         return true; 
       }
     }

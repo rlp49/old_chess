@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <cassert>
+#include <cctype>
 #include "../header/Chess.h"
 
 void show_commands() {
@@ -72,16 +73,16 @@ int main(int argc, char* argv[]) {
 
 		} else {
 			// Process the different commands
-			switch (choice[0]) {
+			switch (toupper(choice[0])) {
 			case '?':
 				// Show the commands
 				show_commands();
 				break;
-			case 'Q': case 'q':
+			case 'Q':
 				// Quit the game
 				game_over = true;
 				break;
-			case 'L': case 'l': {
+			case 'L': {
 				// Load a game from a file
 				std::string argument;
 				std::cin >> argument;
@@ -93,7 +94,7 @@ int main(int argc, char* argv[]) {
 				assert(chess.get_board().has_valid_kings());
 				break;
 			}
-			case 'S': case 's': {
+			case 'S': {
 				// Write a game to a file
 				std::string argument;
 				std::cin >> argument;
@@ -103,7 +104,7 @@ int main(int argc, char* argv[]) {
 				ofs.close();
 				break;
 			}
-			case 'M': case 'm': {
+			case 'M': {
 				// Make a move
 				std::string argument;
 				std::cin >> argument;
@@ -114,8 +115,8 @@ int main(int argc, char* argv[]) {
 					  argument << " ) = " << argument.length() << std::endl;
 				// And make the move
 				} else {
-					chess.make_move(std::make_pair(argument[0], argument[1]),
-							std::make_pair(argument[2], argument[3]));
+					chess.make_move(std::make_pair(toupper(argument[0]), argument[1]),
+							std::make_pair(toupper(argument[2]), argument[3]));
 				}
 				break;
 			}
